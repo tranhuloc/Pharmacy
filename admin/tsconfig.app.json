@@ -1,0 +1,18 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.web.json",
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
+  "exclude": ["src/**/__tests__/*"],
+  "compilerOptions": {
+    "composite": true,
+    "baseUrl": ".",
+    "types": ["element-plus/global"],
+    "paths": {
+      "@/*": ["./src/*"],
+      "@master/*": ["./src/modules/master/*"],
+      "@system/*": ["./src/modules/system/*"],
+      "@auth/*": ["./src/modules/auth/*"],
+      "@payment/*": ["./src/modules/payment/*"],
+      "@app/*": ["./src/modules/app/*"]
+    }
+  }
+}

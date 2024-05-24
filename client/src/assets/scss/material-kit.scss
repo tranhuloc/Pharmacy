@@ -1,0 +1,52 @@
+// =========================================================
+// * Material Kit - v3.0.4
+// =========================================================
+//
+// * Product Page: https://www.creative-tim.com/product/material-kit
+// * Copyright 2022 Creative Tim (https://www.creative-tim.com)
+//
+// Coded by www.creative-tim.com
+//
+// =========================================================
+//
+// * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+// Bootstrap Functions
+@import "material-kit/bootstrap/functions";
+
+// Custom Variables
+@import "material-kit/custom/variables";
+
+// Theme Variables
+@import "material-kit/variables";
+
+// Bootstrap Core
+@import "material-kit/bootstrap/bootstrap";
+
+// Theme Core
+@import "material-kit/theme";
+
+// Custom Variables
+@import "material-kit/custom/styles";
+
+/* Toàn bộ scrollbar */
+::-webkit-scrollbar {
+    width: 6px; /* Độ rộng của scrollbar dọc */
+    height: 6px; /* Độ cao của scrollbar ngang */
+}
+
+/* Phần track của scrollbar */
+::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Màu nền của track */
+}
+
+/* Phần thumb của scrollbar */
+::-webkit-scrollbar-thumb {
+    background: #888; /* Màu của thumb */
+    border-radius: 6px; /* Bo góc của thumb */
+}
+
+/* Thumb khi hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Màu của thumb khi hover */
+}
