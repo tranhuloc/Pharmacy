@@ -126,13 +126,13 @@ const getTextColor = () => {
           : 'text-white font-weight-bolder ms-sm-3'
       ]" :to="{ name: 'presentation' }" rel="tooltip" title="Designed and Coded by Creative Tim"
         data-placement="bottom">
-        Bán thuốc
+        MDS
       </RouterLink>
       <RouterLink class="navbar-brand d-block d-md-none" :class="props.transparent || props.dark
         ? 'text-white'
         : 'font-weight-bolder ms-sm-3'
         " to="/" rel="tooltip" title="Designed and Coded by Creative Tim" data-placement="bottom">
-        Bán thuốc
+        MDS
       </RouterLink>
       <a href="/login" class="btn btn-sm bg-gradient-success mb-0 ms-auto d-lg-none d-block">ĐĂNG NHẬP</a>
       <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse"
