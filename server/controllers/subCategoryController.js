@@ -156,7 +156,7 @@ exports.editSubCategory = async (req, res) => {
 exports.deleteSubCategory = async (req, res) => {
   try {
     const subcategory_id = req.params.subcategory_id;
-    const subcategory = await Category.findByIdAndUpdate(
+    const subcategory = await Subcategory.findByIdAndUpdate(
       subcategory_id,
       { is_deleted: true, updated_at: Date.now() },
       { new: true }
