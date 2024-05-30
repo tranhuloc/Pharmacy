@@ -55,7 +55,7 @@ router.delete('/suppliers/:supplier_id', supplierController.deleteSupplier);
 
 // Routes for 'imageProduct'
 router.get('/products/:product_id/images', imageProductController.getImagesByProductId);
-router.delete('/images/:imageId', imageProductController.deleteImages);
+router.delete('/images/:image_id', imageProductController.deleteImages);
 
 // Routes for 'orders'
 router.get('/orders/:status', orderController.getAllOrders);
