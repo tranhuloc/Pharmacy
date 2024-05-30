@@ -99,13 +99,11 @@ exports.getAllProducts = async (req, res) => {
         ]);
         res.status(200).json({ success: true, data: products });
     } catch (error) {
-        return res
-            .status(500)
-            .json({
-                success: false,
-                message: "Lỗi khi lấy danh sách sản phẩm",
-                error: error.message,
-            });
+        return res.status(500).json({
+            success: false,
+            message: "Lỗi khi lấy danh sách sản phẩm",
+            error: error.message,
+        });
     }
 };
 
@@ -206,21 +204,17 @@ exports.getProductById = async (req, res) => {
                 data: productWithDetails[0],
             });
         } else {
-            return res
-                .status(404)
-                .json({
-                    success: false,
-                    message: "Không thể tìm thấy thông tin sản phẩm",
-                });
+            return res.status(404).json({
+                success: false,
+                message: "Không thể tìm thấy thông tin sản phẩm",
+            });
         }
     } catch (error) {
-        return res
-            .status(500)
-            .json({
-                success: false,
-                message: "Lỗi khi lấy thông tin sản phẩm",
-                error: error.message,
-            });
+        return res.status(500).json({
+            success: false,
+            message: "Lỗi khi lấy thông tin sản phẩm",
+            error: error.message,
+        });
     }
 };
 
@@ -230,12 +224,10 @@ exports.createProduct = async (req, res) => {
         upload.array("images", 5)(req, res, async err => {
             if (err) {
                 // Xử lý lỗi nếu có
-                return res
-                    .status(500)
-                    .json({
-                        success: false,
-                        message: "Lỗi khi xử lý tệp tải lên",
-                    });
+                return res.status(500).json({
+                    success: false,
+                    message: "Lỗi khi xử lý tệp tải lên",
+                });
             }
 
             const product_name = req.body.product_name;
@@ -292,19 +284,15 @@ exports.createProduct = async (req, res) => {
                         await imageProduct.save();
                     }
 
-                    return res
-                        .status(200)
-                        .json({
-                            success: true,
-                            message: "Sản phẩm đã được khôi phục thành công",
-                        });
+                    return res.status(200).json({
+                        success: true,
+                        message: "Sản phẩm đã được khôi phục thành công",
+                    });
                 } else {
-                    return res
-                        .status(409)
-                        .json({
-                            success: false,
-                            message: "Sản phẩm đã tồn tại!",
-                        });
+                    return res.status(409).json({
+                        success: false,
+                        message: "Sản phẩm đã tồn tại!",
+                    });
                 }
             }
 
@@ -344,21 +332,17 @@ exports.createProduct = async (req, res) => {
                 await imageProduct.save();
             }
 
-            return res
-                .status(200)
-                .json({
-                    success: true,
-                    message: "Sản phẩm đã được tạo thành công",
-                });
+            return res.status(200).json({
+                success: true,
+                message: "Sản phẩm đã được tạo thành công",
+            });
         });
     } catch (error) {
-        return res
-            .status(500)
-            .json({
-                success: false,
-                message: "Lỗi khi tạo sản phẩm",
-                error: error.message,
-            });
+        return res.status(500).json({
+            success: false,
+            message: "Lỗi khi tạo sản phẩm",
+            error: error.message,
+        });
     }
 };
 
@@ -368,12 +352,10 @@ exports.editProduct = async (req, res) => {
         upload.array("images", 5)(req, res, async err => {
             if (err) {
                 // Xử lý lỗi nếu có
-                return res
-                    .status(500)
-                    .json({
-                        success: false,
-                        message: "Lỗi khi xử lý tệp tải lên",
-                    });
+                return res.status(500).json({
+                    success: false,
+                    message: "Lỗi khi xử lý tệp tải lên",
+                });
             }
             const product_id = req.params.product_id;
             const product_name = req.body.product_name;
@@ -407,6 +389,7 @@ exports.editProduct = async (req, res) => {
 
                 const imageUrlsToDelete = await Image.find({
                     product_id: product_id,
+                    is_deleted: false,
                 });
 
                 // Cập nhật thông tin sản phẩm
@@ -449,21 +432,17 @@ exports.editProduct = async (req, res) => {
                 });
             }
 
-            return res
-                .status(200)
-                .json({
-                    success: true,
-                    message: "Sản phẩm đã được cập nhật thành công",
-                });
+            return res.status(200).json({
+                success: true,
+                message: "Sản phẩm đã được cập nhật thành công",
+            });
         });
     } catch (error) {
-        return res
-            .status(500)
-            .json({
-                success: false,
-                message: "Lỗi khi chỉnh sửa sản phẩm",
-                error: error.message,
-            });
+        return res.status(500).json({
+            success: false,
+            message: "Lỗi khi chỉnh sửa sản phẩm",
+            error: error.message,
+        });
     }
 };
 
@@ -483,20 +462,16 @@ exports.deleteProduct = async (req, res) => {
                 .status(404)
                 .json({ success: false, message: "Sản phẩm không tồn tại" });
         }
-        return res
-            .status(200)
-            .json({
-                success: true,
-                message: "Sản phẩm đã được xóa thành công",
-            });
+        return res.status(200).json({
+            success: true,
+            message: "Sản phẩm đã được xóa thành công",
+        });
     } catch (error) {
-        return res
-            .status(500)
-            .json({
-                success: false,
-                message: "Lỗi khi xóa sản phẩm",
-                error: error.message,
-            });
+        return res.status(500).json({
+            success: false,
+            message: "Lỗi khi xóa sản phẩm",
+            error: error.message,
+        });
     }
 };
 
@@ -525,12 +500,10 @@ exports.getProductsBySubcategory = async (req, res) => {
         }
 
         if (!subcategory) {
-            return res
-                .status(404)
-                .json({
-                    success: false,
-                    message: "Danh mục con không tồn tại",
-                });
+            return res.status(404).json({
+                success: false,
+                message: "Danh mục con không tồn tại",
+            });
         }
         const products = await Product.find({
             subcategory_id: subcategory._id,
@@ -538,13 +511,11 @@ exports.getProductsBySubcategory = async (req, res) => {
         }).sort(sortOptions);
         return res.status(200).json({ success: true, data: products });
     } catch (error) {
-        return res
-            .status(500)
-            .json({
-                success: false,
-                message: "Lỗi khi lấy danh sách sản phẩm theo subcategory_id",
-                error: error.message,
-            });
+        return res.status(500).json({
+            success: false,
+            message: "Lỗi khi lấy danh sách sản phẩm theo subcategory_id",
+            error: error.message,
+        });
     }
 };
 
@@ -596,13 +567,11 @@ exports.getProductsByCategory = async (req, res) => {
 
         return res.status(200).json({ success: true, data: products });
     } catch (error) {
-        return res
-            .status(500)
-            .json({
-                success: false,
-                message: "Lỗi khi lấy danh sách sản phẩm theo category_id",
-                error: error.message,
-            });
+        return res.status(500).json({
+            success: false,
+            message: "Lỗi khi lấy danh sách sản phẩm theo category_id",
+            error: error.message,
+        });
     }
 };
 
@@ -614,13 +583,11 @@ exports.getNewestProducts = async (req, res) => {
 
         return res.status(200).json({ success: true, data: newestProducts });
     } catch (error) {
-        return res
-            .status(500)
-            .json({
-                success: false,
-                message: "Lỗi khi lấy sản phẩm mới nhất",
-                error: error.message,
-            });
+        return res.status(500).json({
+            success: false,
+            message: "Lỗi khi lấy sản phẩm mới nhất",
+            error: error.message,
+        });
     }
 };
 
@@ -635,13 +602,11 @@ exports.search = async (req, res) => {
 
         return res.status(200).json({ success: true, data: results });
     } catch (error) {
-        return res
-            .status(500)
-            .json({
-                success: false,
-                message: "Lỗi khi tìm kiếm sản phẩm",
-                error: error.message,
-            });
+        return res.status(500).json({
+            success: false,
+            message: "Lỗi khi tìm kiếm sản phẩm",
+            error: error.message,
+        });
     }
 };
 

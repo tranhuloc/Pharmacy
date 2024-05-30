@@ -54,7 +54,7 @@ const getImageUrl = (url: any) => {
                     <div class="card">
                         <el-carousel :interval="4000" type="card" class="m-4">
                             <el-carousel-item v-for="item in data.images" :key="item._id">
-                                <img :src="getImageUrl(item.image_url)" loading="lazy" />
+                                <img :src="getImageUrl(item.image_url)" loading="lazy" style="width: 100%" />
                             </el-carousel-item>
                         </el-carousel>
                     </div>
