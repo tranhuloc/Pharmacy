@@ -35,7 +35,7 @@ router.get('/users', userController.getAllUsers);
 router.get('/users/:user_id', userController.getUserById);
 router.put('/users/:user_id', userController.editUser);
 router.delete('/users/:user_id', userController.deleteUser);
-router.get('/users/check_username/:username', userController.checkUserName);
+router.get('/users/check_email/:email', userController.checkEmail);
 router.put('/users/update_password/reset', userController.updatePassword);
 router.post('/users/send_email', userController.sendEmail);
 

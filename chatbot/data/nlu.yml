@@ -1,0 +1,341 @@
+version: "3.0"
+
+nlu:
+  - intent: answer_name
+    examples: |
+      - Tôi tên là [Nam]{"entity": "user_name"}
+      - Chị tên là [Hoa]{"entity": "user_name"}
+      - Anh tên là [Long]{"entity": "user_name"}
+      - Mình tên là [Phúc]{"entity": "user_name"}
+      - Mình tên [Phát]{"entity": "user_name"}
+      - Em tên [Hà]{"entity": "user_name"} nhé
+      - Huy[Nam]{"entity": "user_name"}
+      - Gọi mình là [Phụng]{"entity": "user_name"} nha
+      - Tôi tên [Hoàng]{"entity": "user_name"}
+      - chị tên [Cúc]{"entity": "user_name"}
+      - anh tên [Đức]{"entity": "user_name"}
+      - [Tuấn]{"entity": "user_name"} nhé
+      - [Bình]{"entity": "user_name"}
+      - [Lĩnh]{"entity": "user_name"}
+      - [Viễn]{"entity": "user_name"}
+      - [Duy]{"entity": "user_name"}
+      - [Tú]{"entity": "user_name"}
+      - [Tâm]{"entity": "user_name"}
+      - [Xuân]{"entity": "user_name"}
+      - [Kiều]{"entity": "user_name"}
+      - [Thành]{"entity": "user_name"}
+      - [Đăng]{"entity": "user_name"}
+      - [Bình]{"entity": "user_name"}
+      - [Đạt]{"entity": "user_name"}
+      - [Vy]{"entity": "user_name"}
+      - [Loan]{"entity": "user_name"}
+      - [Luân]{"entity": "user_name"}
+      - [Quang]{"entity": "user_name"}
+      - [Thuận]{"entity": "user_name"}
+      - [Trọng]{"entity": "user_name"}
+      - [Kim]{"entity": "user_name"}
+      - [Hằng]{"entity": "user_name"}
+      - [Cường]{"entity": "user_name"}
+      - [Phú]{"entity": "user_name"}
+      - [Thiện]{"entity": "user_name"}
+      - [Khang]{"entity": "user_name"}
+      - [Vinh]{"entity": "user_name"}
+      - [Án]{"entity": "user_name"}
+      - [Phương]{"entity": "user_name"}
+      - [Đạo]{"entity": "user_name"}
+      - [An]{"entity": "user_name"}
+      - [Cường]{"entity": "user_name"}
+      - [Bình]{"entity": "user_name"}
+      - [Dương]{"entity": "user_name"}
+      - [Hà]{"entity": "user_name"}
+      - [Giang]{"entity": "user_name"}
+      - [Hải]{"entity": "user_name"}
+      - [Hoàng]{"entity": "user_name"}
+      - [Hùng]{"entity": "user_name"}
+      - [Hưng]{"entity": "user_name"}
+      - [Khanh]{"entity": "user_name"}
+      - [Khôi]{"entity": "user_name"}
+      - [Lâm]{"entity": "user_name"}
+      - [Long]{"entity": "user_name"}
+      - [Minh]{"entity": "user_name"}
+      - [Nam]{"entity": "user_name"}
+      - [Phát]{"entity": "user_name"}
+      - [Phong]{"entity": "user_name"}
+      - [Phúc]{"entity": "user_name"}
+      - [Quân]{"entity": "user_name"}
+      - [Quang]{"entity": "user_name"}
+      - [Quốc]{"entity": "user_name"}
+      - [Sơn]{"entity": "user_name"}
+      - [Thái]{"entity": "user_name"}
+      - [Thanh]{"entity": "user_name"}
+      - [Thịnh]{"entity": "user_name"}
+      - [Tiến]{"entity": "user_name"}
+      - [Toàn]{"entity": "user_name"}
+      - [Trung]{"entity": "user_name"}
+      - [Tuấn]{"entity": "user_name"}
+      - [Văn]{"entity": "user_name"}
+      - [Việt]{"entity": "user_name"}
+      - [Vinh]{"entity": "user_name"}
+      - [Vũ]{"entity": "user_name"}
+      - [Xuân]{"entity": "user_name"}
+      - [Yến]{"entity": "user_name"}
+      - [Ánh]{"entity": "user_name"}
+      - [Ẩn]{"entity": "user_name"}
+      - [Ấn]{"entity": "user_name"}
+      - [Ẩn]{"entity": "user_name"}
+      - [Ân]{"entity": "user_name"}
+      - [Ấn]{"entity": "user_name"}
+      - [Ẩu]{"entity": "user_name"}
+      - [Ấu]{"entity": "user_name"}
+      - [Bách]{"entity": "user_name"}
+      - [Bạch]{"entity": "user_name"}
+      - [Bình]{"entity": "user_name"}
+      - [Bửu]{"entity": "user_name"}
+      - [Cao]{"entity": "user_name"}
+      - [Chí]{"entity": "user_name"}
+      - [Chinh]{"entity": "user_name"}
+      - [Chính]{"entity": "user_name"}
+      - [Chí]{"entity": "user_name"}
+      - [Chung]{"entity": "user_name"}
+      - [Chương]{"entity": "user_name"}
+      - [Cơ]{"entity": "user_name"}
+      - [Công]{"entity": "user_name"}
+      - [Cường]{"entity": "user_name"}
+      - [Dân]{"entity": "user_name"}
+      - [Diệp]{"entity": "user_name"}
+      - [Diệu]{"entity": "user_name"}
+      - [Dũng]{"entity": "user_name"}
+      - [Đạt]{"entity": "user_name"}
+      - [Điền]{"entity": "user_name"}
+      - [Điệp]{"entity": "user_name"}
+      - [Định]{"entity": "user_name"}
+      - [Đoàn]{"entity": "user_name"}
+      - [Đôn]{"entity": "user_name"}
+      - [Đông]{"entity": "user_name"}
+      - [Đức]{"entity": "user_name"}
+      - [Duy]{"entity": "user_name"}
+      - [Duyên]{"entity": "user_name"}
+      - [Dương]{"entity": "user_name"}
+      - [Gia]{"entity": "user_name"}
+      - [Giang]{"entity": "user_name"}
+      - [Hà]{"entity": "user_name"}
+      - [Hạnh]{"entity": "user_name"}
+      - [Hiền]{"entity": "user_name"}
+      - [Hoài]{"entity": "user_name"}
+      - [Hoàn]{"entity": "user_name"}
+      - [Hoàng]{"entity": "user_name"}
+      - [Hồng]{"entity": "user_name"}
+      - [Hợp]{"entity": "user_name"}
+      - [Hùng]{"entity": "user_name"}
+      - [Hưng]{"entity": "user_name"}
+      - [Huy]{"entity": "user_name"}
+      - [Huyền]{"entity": "user_name"}
+      - [Khánh]{"entity": "user_name"}
+      - [Khải]{"entity": "user_name"}
+      - [Khoa]{"entity": "user_name"}
+      - [Khôi]{"entity": "user_name"}
+      - [Khương]{"entity": "user_name"}
+      - [Kiên]{"entity": "user_name"}
+      - [Kỳ]{"entity": "user_name"}
+      - [Lan]{"entity": "user_name"}
+      - [Linh]{"entity": "user_name"}
+      - [Lợi]{"entity": "user_name"}
+      - [Long]{"entity": "user_name"}
+      - [Luân]{"entity": "user_name"}
+      - [Lưu]{"entity": "user_name"}
+      - [Mạnh]{"entity": "user_name"}
+      - [Mai]{"entity": "user_name"}
+      - [Minh]{"entity": "user_name"}
+      - [My]{"entity": "user_name"}
+      - [Nga]{"entity": "user_name"}
+      - [Ngân]{"entity": "user_name"}
+      - [Nghi]{"entity": "user_name"}
+      - [Nghĩa]{"entity": "user_name"}
+      - [Ngọc]{"entity": "user_name"}
+      - [Nguyên]{"entity": "user_name"}
+      - [Nguyệt]{"entity": "user_name"}
+      - [Nhân]{"entity": "user_name"}
+      - [Nhã]{"entity": "user_name"}
+      - [Nhi]{"entity": "user_name"}
+      - [Nhiên]{"entity": "user_name"}
+      - [Nhung]{"entity": "user_name"}
+      - [Phát]{"entity": "user_name"}
+      - [Phong]{"entity": "user_name"}
+      - [Phú]{"entity": "user_name"}
+      - [Phúc]{"entity": "user_name"}
+      - [Phương]{"entity": "user_name"}
+      - [Quân]{"entity": "user_name"}
+      - [Quang]{"entity": "user_name"}
+      - [Quốc]{"entity": "user_name"}
+      - [Quyên]{"entity": "user_name"}
+      - [Quỳnh]{"entity": "user_name"}
+      - [Sang]{"entity": "user_name"}
+      - [Sơn]{"entity": "user_name"}
+      - [Thái]{"entity": "user_name"}
+      - [Thắng]{"entity": "user_name"}
+      - [Thanh]{"entity": "user_name"}
+      - [Thảo]{"entity": "user_name"}
+      - [Thiên]{"entity": "user_name"}
+      - [Thu]{"entity": "user_name"}
+      - [Thuận]{"entity": "user_name"}
+      - [Thủy]{"entity": "user_name"}
+      - [Tiến]{"entity": "user_name"}
+      - [Toàn]{"entity": "user_name"}
+      - [Tráng]{"entity": "user_name"}
+      - [Trang]{"entity": "user_name"}
+      - [Trí]{"entity": "user_name"}
+      - [Trọng]{"entity": "user_name"}
+      - [Trung]{"entity": "user_name"}
+      - [Tuấn]{"entity": "user_name"}
+      - [Tùng]{"entity": "user_name"}
+      - [Tú]{"entity": "user_name"}
+      - [Tuyến]{"entity": "user_name"}
+      - [Uyên]{"entity": "user_name"}
+      - [Vân]{"entity": "user_name"}
+      - [Vũ]{"entity": "user_name"}
+      - [Vy]{"entity": "user_name"}
+      - [Xuân]{"entity": "user_name"}
+      - [Yến]{"entity": "user_name"}
+      - [Ái]{"entity": "user_name"}
+      - [Ân]{"entity": "user_name"}
+      - [Ấn]{"entity": "user_name"}
+      - [Ẩn]{"entity": "user_name"}
+      - [Âu]{"entity": "user_name"}
+      - [Ẩu]{"entity": "user_name"}
+      - [Ươm]{"entity": "user_name"}
+      - [Ướp]{"entity": "user_name"}
+      - [Ương]{"entity": "user_name"}
+      - [Ương]{"entity": "user_name"}
+      - [Ươm]{"entity": "user_name"}
+      - [Ướp]{"entity": "user_name"}
+      - [Ác]{"entity": "user_name"}
+      - [Ái]{"entity": "user_name"}
+      - [Âm]{"entity": "user_name"}
+      - [Ân]{"entity": "user_name"}
+      - [Bá]{"entity": "user_name"}
+      - [Bạch]{"entity": "user_name"}
+      - [Bai]{"entity": "user_name"}
+      - [Bích]{"entity": "user_name"}
+      - [Bo]{"entity": "user_name"}
+      - [Bồ]{"entity": "user_name"}
+      - [Cao]{"entity": "user_name"}
+      - [Cát]{"entity": "user_name"}
+      - [Châu]{"entity": "user_name"}
+      - [Chi]{"entity": "user_name"}
+      - [Chinh]{"entity": "user_name"}
+      - [Chí]{"entity": "user_name"}
+      - [Chính]{"entity": "user_name"}
+      - [Chu]{"entity": "user_name"}
+      - [Cúc]{"entity": "user_name"}
+      - [Dai]{"entity": "user_name"}
+      - [Đàm]{"entity": "user_name"}
+      - [Đan]{"entity": "user_name"}
+      - [Điệp]{"entity": "user_name"}
+      - [Đinh]{"entity": "user_name"}
+      - [Đoan]{"entity": "user_name"}
+      - [Đông]{"entity": "user_name"}
+      - [Đức]{"entity": "user_name"}
+      - [Duyên]{"entity": "user_name"}
+      - [Gia]{"entity": "user_name"}
+      - [Giang]{"entity": "user_name"}
+      - [Hạnh]{"entity": "user_name"}
+      - [Hiếu]{"entity": "user_name"}
+      - [Hiền]{"entity": "user_name"}
+      - [Hoài]{"entity": "user_name"}
+      - [Hương]{"entity": "user_name"}
+
+  - intent: greet
+    examples: |
+      - hey
+      - hello
+      - hi
+      - chào
+      - xin chào
+      - chào bot
+      - có ai ở đó không
+      - tôi cần hỗ trợ
+      - Chào bạn
+      - Chào anh
+      - Chào chị
+      - Chào buổi sáng
+      - Có đó không
+      - Rãnh không
+      - Ê
+      - Hú
+      - chào em
+      - em ơi, cho anh hỏi
+      - bot ơi
+      - cho mình hỏi chút
+
+  - intent: goodbye
+    examples: |
+      - bye
+      - goodbye
+      - g9
+      - good night
+      - bye bye
+      - tạm biệt
+      - Hẹn gặp lại
+      - Ngủ ngon
+      - Chúc ngủ ngon
+      - Nói chuyện sau nhé
+      - Tôi sẽ liên hệ sau
+      - tạm biệt em
+      - tạm biệt bot nhá
+      - Biến
+      - Không
+
+  - intent: suggest
+    examples: |
+      - Có sản phẩm nào nổi bật nhất không?
+      - Sản phẩm nổi bật nhất là gì?
+      - Sản phẩm nào được đánh giá cao nhất?
+      - Có sản phẩm nào ngon không?
+      - Sản phẩm nào ngon nhất?
+
+  - intent: store
+    examples: |
+      - Tên cửa hàng là gì
+      - Tên cửa hàng
+      - Tên của cửa hàng
+      - Cửa hàng tên gì
+      - Biết tên của cửa hàng không
+
+  - intent: owner
+    examples: |
+      - Tên chủ cửa hàng là gì
+      - Tên chủ cửa hàng
+      - Tên của chủ cửa hàng
+      - Chủ cửa hàng tên gì
+      - Biết tên của chủ cửa hàng không
+
+  - intent: phone_number 
+    examples: |
+      - Số điện thoại của cửa hàng là gì
+      - Số điện thoại cửa hàng
+      - Số điện thoại của cửa hàng
+      - Cửa hàng có số điện thoại gì
+      - Biết số điện thoại của chủ cửa hàng không
+
+  - intent: address
+    examples: |
+      - Cửa hàng ở đâu
+      - địa chỉ của cửa hàng
+      - Cửa hàng có địa chỉ gì
+      - Biết địa chỉ của cửa hàng không
+
+  - intent: time
+    examples: |
+      - Mấy giờ mở cửa
+      - Đóng cửa mấy giờ
+      - Giờ mở của
+      - Mấy giờ đóng cửa
+      - Mở cửa mấy giờ
+      - Giờ đóng của
+      - Thời gian bán
+
+  - intent: pham_vi
+    examples: |
+      - cửa hàng giao những nơi nào
+      - pham vi giao món ăn của cửa hàng
+      - pham vi giao món ăn

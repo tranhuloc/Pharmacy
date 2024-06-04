@@ -1,0 +1,48 @@
+version: "3.0"
+
+stories:
+  - story: chao hoi khach hang
+    steps:
+      - intent: greet
+      - action: utter_ask_name
+      - intent: answer_name
+      - action: utter_greet_with_name
+      - intent: suggest
+      - action: utter_suggest
+      - intent: goodbye
+      - action: utter_goodbye_with_name
+
+  - story: suggest
+    steps:
+      - intent: suggest
+      - action: utter_suggest
+
+  - story: name_store
+    steps:
+      - intent: store
+      - action: utter_name_store
+
+  - story: name_owner
+    steps:
+      - intent: owner
+      - action: utter_name_owner
+
+  - story: phone_number
+    steps:
+      - intent: phone_number
+      - action: utter_phone_number
+
+  - story: address
+    steps:
+      - intent: address
+      - action: utter_address
+
+  - story: time
+    steps:
+      - intent: time
+      - action: utter_time
+
+  - story: pham_vi
+    steps:
+      - intent: pham_vi
+      - action: utter_pham_vi

@@ -50,3 +50,34 @@
 ::-webkit-scrollbar-thumb:hover {
     background: #555; /* Màu của thumb khi hover */
 }
+
+
+.chat-message-div {
+    display: flex;
+}
+
+.chat-message-sent {
+    background-color: white;
+    margin: 8px 16px 8px 64px;
+    padding: 8px 16px;
+    animation-name: fadeIn;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-in;
+    animation-duration: 100ms;
+    color: black;
+    border-radius: 8px 8px 2px 8px;
+    background-color: lavender;
+}
+
+.chat-message-received {
+    background-color: white;
+    margin: 8px 64px 8px 16px;
+    padding: 8px 16px;
+    animation-name: fadeIn;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-in;
+    animation-duration: 100ms;
+    color: black;
+    border-radius: 8px 8px 8px 2px;
+    background-color: lavender;
+}

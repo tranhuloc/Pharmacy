@@ -1,0 +1,79 @@
+version: "3.0"
+
+intents:
+  - answer_name
+  - greet
+  - goodbye
+  - suggest
+  - store
+  - time
+  - address
+  - owner
+  - phone_number
+  - pham_vi
+
+entities:
+  - user_name
+
+slots:
+  name:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: user_name
+  age:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: user_age
+
+responses:
+  utter_greet:
+    - text: "Xin chào! Tôi có thể giúp gì cho bạn?"
+    - text: "Chào bạn! Bạn cần Bot giúp gì không?"
+    - text: "Xin chào!\nTôi là Bot, rất hân hạnh được trò chuyện với bạn!"
+
+  utter_goodbye:
+    - text: "Bye"
+    - text: "Tạm biệt bạn!"
+    - text: "Tạm biệt!\nHẹn gặp lại!"
+
+  utter_iamabot:
+    - text: "I am a bot, powered by Rasa."
+
+  utter_ask_name:
+    - text: "Bạn vui lòng cho Bot biết tên để tiện xưng hô nhé!"
+
+  utter_greet_with_name:
+    - text: "Xin chào {name}!\n{name} cần Bot giúp gì không?"
+
+  utter_goodbye_with_name:
+    - text: "Tạm biệt {name}!\nHãy quay lại với Bot khi {name} cần nhé!"
+
+  utter_unclear:
+    - text: "Xin lỗi quý khách, tôi chưa hiểu được!"
+
+  utter_address:
+    - text: "Địa chỉ cửa hàng ở 336, ấp Hưng Hòa, xã Tân Mỹ B, huyện Đức Hòa, tỉnh Long An"
+
+  utter_phone_number:
+    - text: "Số điện thoại của cửa hàng là 0778905454"
+
+  utter_name_owner:
+    - text: "Tên của chủ cửa hàng là Trần Hữu Lộc"
+
+  utter_name_store:
+    - text: "Tên của cửa hàng là MDS"
+  
+  utter_time:
+    - text: "Cửa hàng mình mở cửa lúc 6h và đóng cửa lúc 22h00 ạ"
+
+  utter_pham_vi:
+    - text: "Dạ cửa hàng mình có hỗ trợ vận chuyển khắp cả nước ạ"
+  
+  utter_suggest:
+    - text: "Các món ngon nhất của cửa hàng là Thịt bò Mĩ, Gạo ST25..."
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

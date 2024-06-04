@@ -1,0 +1,7 @@
+version: "3.0"
+
+rules:
+  - rule: Chua hieu y khach
+    steps:
+      - intent: bot_challenge
+      - action: utter_unclear

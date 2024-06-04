@@ -6,9 +6,8 @@ const nodemailer = require('nodemailer');
 // Thêm mới người dùng
 exports.addUser = async (req, res) => {
   try {
-    const { firstname, lastname, username, password, phone, email, address, role_id } = req.body;
-    const existingUser = await User.findOne({ username });
-    const existingUser1 = await User.findOne({ email });
+    const { fullname, password, phone, email, address, role_id } = req.body;
+    const existingUser = await User.findOne({ email });
 
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
@@ -25,9 +24,7 @@ exports.addUser = async (req, res) => {
 
     if (existingUser) {
       if (existingUser.is_deleted) {
-        existingUser.firstname = firstname;
-        existingUser.lastname = lastname;
-        existingUser.username = username;
+        existingUser.fullname = fullname;
         existingUser.password = hashedPassword;
         existingUser.phone = phone;
         existingUser.email = email;
@@ -40,28 +37,9 @@ exports.addUser = async (req, res) => {
         return res.status(409).json({ success: false, message: 'Người dùng đã tồn tại!' });
       }
     }
-    if (existingUser1) {
-      if (existingUser1.is_deleted) {
-        existingUser1.firstname = firstname;
-        existingUser1.lastname = lastname;
-        existingUser1.username = username;
-        existingUser1.password = hashedPassword;
-        existingUser1.phone = phone;
-        existingUser1.email = email;
-        existingUser1.address = address;
-        existingUser1.role_id = user_role;
-        existingUser1.is_deleted = false;
-        await existingUser1.save();
-        return res.status(200).json({ success: true, message: 'Người dùng đã được khôi phục!', data: existingUser1 });
-      } else {
-        return res.status(409).json({ success: false, message: 'Người dùng đã tồn tại!' });
-      }
-    }
 
     const newUser = new User({
-      firstname,
-      lastname,
-      username,
+      fullname,
       password: hashedPassword,
       phone,
       email,
@@ -110,9 +88,7 @@ exports.getUserById = async (req, res) => {
     return res.status(200).json({
       success: true, data: {
         _id: user._id,
-        username: user.username,
-        firstname: user.firstname,
-        lastname: user.lastname,
+        fullname: user.fullname,
         email: user.email,
         phone: user.phone,
         address: user.address,
@@ -129,7 +105,7 @@ exports.getUserById = async (req, res) => {
 // Cập nhật thông tin người dùng bằng ID
 exports.editUser = async (req, res) => {
   try {
-    const { firstname, lastname, username, password, phone, email, address, role_id, flgEmail, flgUserName } = req.body;
+    const { fullname, password, phone, email, address, role_id, flgEmail, flgUserName } = req.body;
     if (flgEmail) {
       const existingUser = await User.findOne({ email, is_deleted: false });
 
@@ -137,19 +113,10 @@ exports.editUser = async (req, res) => {
         return res.status(401).json({ success: false, message: 'Email đã tồn tại!' });
       }
     }
-
-    if (flgUserName) {
-      const existingUser = await User.findOne({ username, is_deleted: false });
-
-      if (existingUser) {
-        return res.status(401).json({ success: false, message: 'Người dùng đã tồn tại!' });
-      }
-    }
+    
     // Kiểm tra xem role_id đã tồn tại và mật khẩu có thay đổi hay không
     const updateFields = {
-      firstname,
-      lastname,
-      username,
+      fullname,
       phone,
       email,
       address,
@@ -208,9 +175,9 @@ exports.deleteUser = async (req, res) => {
 // Lấy thông tin người dùng bằng ID
 exports.login = async (req, res) => {
   try {
-    const { username, password } = req.body;
-
-    const user = await User.findOne({ username, is_deleted: false });
+    const { email, password } = req.body;
+  
+    const user = await User.findOne({ email, is_deleted: false });
 
     if (!user) {
       return res.status(401).json({ success: false, message: 'Tên người dùng không tồn tại' });
@@ -239,11 +206,11 @@ exports.login = async (req, res) => {
   }
 };
 
-// verify the Username exist
-exports.checkUserName = async (req, res) => {
-  const username = req.params.username;
+// verify the email exist
+exports.checkEmail = async (req, res) => {
+  const email = req.params.email;
   try {
-    const user = await User.findOne({ username: username, is_deleted: false });
+    const user = await User.findOne({ email, is_deleted: false });
     if (user) {
       return res.status(200).json({ success: true, data: user.email });
     } else {
@@ -255,10 +222,10 @@ exports.checkUserName = async (req, res) => {
 };
 
 exports.updatePassword = async (req, res) => {
-  const { username, newPassword } = req.body;
+  const { email, newPassword } = req.body;
 
   try {
-    const user = await User.findOne({ username: username, is_deleted: false });
+    const user = await User.findOne({ email, is_deleted: false });
     if (!user) {
       return res.status(404).json({ success: false, message: 'Người dùng không tồn tại' });
     }

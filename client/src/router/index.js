@@ -3,7 +3,9 @@ import PresentationView from "../views/Presentation/PresentationView.vue";
 import AboutView from "../views/LandingPages/AboutUs/AboutView.vue";
 import ContactView from "../views/LandingPages/ContactUs/ContactView.vue";
 import AuthorView from "../views/LandingPages/Author/AuthorView.vue";
-import SignInBasicView from "../views/LandingPages/SignIn/BasicView.vue";
+import SignInView from "../views/Auth/SignInView.vue";
+import SignUpView from "../views/Auth/SignUpView.vue";
+import CartView from "../views/Cart/CartView.vue";
 import PageHeaders from "../layouts/sections/page-sections/page-headers/HeadersView.vue";
 import PageFeatures from "../layouts/sections/page-sections/features/FeaturesView.vue";
 import NavigationNavbars from "../layouts/sections/navigation/navbars/NavbarsView.vue";
@@ -36,8 +38,13 @@ const router = createRouter({
     },
     {
       path: "/login",
-      name: "signin-basic",
-      component: SignInBasicView,
+      name: "page-signin",
+      component: SignInView,
+    },
+    {
+      path: "/register",
+      name: "page-signup",
+      component: SignUpView,
     },
     {
       path: "/detail/:id",
@@ -48,6 +55,11 @@ const router = createRouter({
       path: "/collection/:name",
       name: "page-collection",
       component: CollectionView,
+    },
+    {
+      path: "/cart",
+      name: "page-cart",
+      component: CartView,
     },
   ],
 });
