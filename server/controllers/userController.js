@@ -190,11 +190,6 @@ exports.login = async (req, res) => {
     }
     const role = await Role.findById(user.role_id);
 
-    res.json({
-      user: user,
-      role_name: role ? role.role_name : '',
-      message: 'Đăng nhập thành công'
-    });
     return res.status(200).json({
       success: true, message: 'Đăng nhập thành công', data: {
         user: user,

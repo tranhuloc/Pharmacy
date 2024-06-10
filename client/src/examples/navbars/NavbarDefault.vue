@@ -3,7 +3,7 @@
  * Dependencies injection library
  */
 import axios from 'axios';
-import { RouterLink } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
 import { ref, watch, onMounted } from "vue";
 import { useWindowsWidth } from "../../assets/js/useWindowsWidth";
 import ArrDark from "@/assets/img/down-arrow-dark.svg";
@@ -41,6 +41,9 @@ const props = defineProps({
     default: false
   }
 });
+const isLogged = ref<any>(false);
+const userInfo = ref<any>({});
+const router = useRouter()
 
 // set nav color on mobile && desktop
 
@@ -57,6 +60,9 @@ if (type.value === "mobile") {
  * Life circle vue js
  */
 onMounted(async () => {
+  isLogged.value = localStorage.getItem('isLogged') ?? false;
+  userInfo.value = JSON.parse(localStorage.getItem('userInfo')) ?? {};
+
   await fetchData();
 });
 
@@ -106,6 +112,15 @@ const getTextColor = () => {
   return color;
 };
 
+const handleLogout = async () => {
+  localStorage.removeItem('userInfo');
+  localStorage.removeItem('roleName');
+  localStorage.removeItem('isLogged');
+  router.push({
+    name: 'page-signin',
+  })
+};
+
 </script>
 <template>
   <nav class="navbar navbar-expand-lg top-0" :class="{
@@ -124,8 +139,7 @@ const getTextColor = () => {
         (props.transparent && textDark.value) || !props.transparent
           ? 'text-dark font-weight-bolder ms-sm-3'
           : 'text-white font-weight-bolder ms-sm-3'
-      ]" :to="{ name: 'presentation' }" rel="tooltip" title="Designed and Coded by Creative Tim"
-        data-placement="bottom">
+      ]" :to="{ name: 'Home' }" rel="tooltip" title="Designed and Coded by Creative Tim" data-placement="bottom">
         MDS
       </RouterLink>
       <RouterLink class="navbar-brand d-block d-md-none" :class="props.transparent || props.dark
@@ -134,7 +148,8 @@ const getTextColor = () => {
         " to="/" rel="tooltip" title="Designed and Coded by Creative Tim" data-placement="bottom">
         MDS
       </RouterLink>
-      <RouterLink to="/login" class="btn btn-sm bg-gradient-success mb-0 ms-auto d-lg-none d-block">ĐĂNG NHẬP</RouterLink>
+      <RouterLink v-if="!isLogged" to="/login" class="btn btn-sm bg-gradient-success mb-0 ms-auto d-lg-none d-block">
+        ĐĂNG NHẬP</RouterLink>
       <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse"
         data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon mt-2">
@@ -147,14 +162,14 @@ const getTextColor = () => {
         <ul class="navbar-nav navbar-nav-hover ms-auto">
           <li class="nav-item dropdown dropdown-hover mx-2">
             <a role="button" class="nav-link ps-2 d-flex cursor-pointer align-items-center" :class="getTextColor()"
-              id="dropdownMenuPages" data-bs-toggle="dropdown" aria-expanded="false">
+              id="dropdownMenuCategory" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="material-icons opacity-6 me-2 text-md" :class="getTextColor()">dashboard</i>
               Danh mục
               <img :src="getArrowColor()" alt="down-arrow" class="arrow ms-2 d-lg-block d-none" />
               <img :src="getArrowColor()" alt="down-arrow" class="arrow ms-1 d-lg-none d-block ms-auto" />
             </a>
             <div class="dropdown-menu dropdown-menu-animation ms-n3 dropdown-md p-3 border-radius-xl mt-0 mt-lg-3"
-              aria-labelledby="dropdownMenuPages">
+              aria-labelledby="dropdownMenuCategory">
               <div class="row d-none d-lg-block">
                 <div class="col-12 px-4 py-2">
                   <div class="row">
@@ -187,15 +202,51 @@ const getTextColor = () => {
               </div>
             </div>
           </li>
+          <li v-if="isLogged" class="nav-item dropdown dropdown-hover mx-2">
+            <a role="button" class="nav-link ps-2 d-flex cursor-pointer align-items-center" :class="getTextColor()"
+              id="dropdownAccount" data-bs-toggle="dropdown" aria-expanded="false">
+              {{ userInfo.fullname }}
+            </a>
+            <div class="dropdown-menu dropdown-menu-animation ms-n3 dropdown-md p-3 border-radius-xl mt-0 mt-lg-3"
+              aria-labelledby="dropdownAccount">
+              <div class="row d-none d-lg-block">
+                <div class="col-12 px-4 py-2">
+                  <div class="row">
+                    <div class="position-relative">
+                      <el-popconfirm confirm-button-text="Có" cancel-button-text="Không" :icon="InfoFilled"
+                        icon-color="#626AEF" title="Bạn muốn đăng xuất?" @confirm="handleLogout">
+                        <template #reference>
+                          <div class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1">
+                            Đăng xuất
+                          </div>
+                        </template>
+                      </el-popconfirm>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="d-lg-none">
+                <el-popconfirm confirm-button-text="Có" cancel-button-text="Không" :icon="InfoFilled"
+                  icon-color="#626AEF" title="Bạn muốn đăng xuất?" @confirm="handleLogout">
+                  <template #reference>
+                    <div class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1">
+                      Đăng xuất
+                    </div>
+                  </template>
+                </el-popconfirm>
+              </div>
+            </div>
+          </li>
         </ul>
         <ul class="navbar-nav d-lg-block d-none">
           <li class="nav-item">
-            <a href="/login" class="btn btn-sm bg-gradient-success mb-0"
-              onclick="smoothToPricing('pricing-soft-ui')">ĐĂNG NHẬP</a>
+            <RouterLink v-if="!isLogged" to="/login" class="btn btn-sm bg-gradient-success mb-0">
+              ĐĂNG NHẬP</RouterLink>
           </li>
         </ul>
       </div>
     </div>
   </nav>
+  <vue3-confirm-dialog />
   <!-- End Navbar -->
 </template>

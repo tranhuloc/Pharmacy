@@ -6,17 +6,20 @@ import axios from 'axios';
 import { onMounted, ref } from "vue";
 import DefaultNavbar from "@/examples/navbars/NavbarDefault.vue";
 import Header from "@/examples/Header.vue";
-import { RouterLink } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
 import MaterialInput from "@/components/MaterialInput.vue";
 import MaterialSwitch from "@/components/MaterialSwitch.vue";
 import MaterialButton from "@/components/MaterialButton.vue";
 import setMaterialInput from "@/assets/js/material-input";
+import { useToast } from 'vue-toast-notification';
 
 /**
  * Variable define
  */
 const email = ref<any>('');
 const password = ref<any>('');
+const router = useRouter()
+const toast = useToast();
 
 /**
  * Life circle vue js
@@ -34,10 +37,19 @@ const onLogin = async () => {
       email: email.value,
       password: password.value,
     });
-    data.value = response && response.data ? response.data.data : {};
-
+    if (response.status == 200) {
+      const data = response.data.data
+      localStorage.setItem('userInfo', JSON.stringify(data.user));
+      localStorage.setItem('roleName', data.role_name)
+      localStorage.setItem('isLogged', true)
+      router.push({
+        name: 'Home',
+      })
+      toast.success("Đăng nhập thành công");
+    }
+    else toast.error("Đăng nhập không thành công");
   } catch (error) {
-    console.error('Error fetching data:', error);
+    toast.error(error.response.data.message);
   }
 }
 </script>

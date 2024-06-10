@@ -8,8 +8,6 @@ import vi from 'element-plus/dist/locale/vi.js'
 import { createStore } from 'vuex';
 import ToastPlugin from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-bootstrap.css';
-import Vue3ConfirmDialog from 'vue3-confirm-dialog';
-import 'vue3-confirm-dialog/style';
 
 // Nucleo Icons
 import "./assets/css/nucleo-icons.css";
@@ -60,8 +58,6 @@ const store = createStore({
 const app = createApp(App);
 
 app.use(store); 
-app.use(Vue3ConfirmDialog);
-app.component('vue3-confirm-dialog', Vue3ConfirmDialog.default);
 app.use(ToastPlugin);
 app.use(createPinia());
 app.use(router);

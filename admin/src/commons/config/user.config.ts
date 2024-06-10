@@ -35,12 +35,8 @@ export const colConfig = [
     title: 'Tên đăng nhập',
   },
   {
-    key: "firstname",
-    title: 'Họ',
-  },
-  {
-    key: "lastname",
-    title: 'Tên',
+    key: "fullname",
+    title: 'Họ và tên',
   },
   {
     key: "email",

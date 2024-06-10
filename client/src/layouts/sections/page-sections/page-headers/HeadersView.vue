@@ -23,7 +23,7 @@ onMounted(() => {
   <BaseLayout
     title="Page Headers"
     :breadcrumb="[
-      { label: 'Page Sections', route: '/presentation' },
+      { label: 'Page Sections', route: '/Home' },
       { label: 'Page Headers' },
     ]"
   >

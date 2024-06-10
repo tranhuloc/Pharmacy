@@ -16,7 +16,7 @@
               Họ và tên
             </div>
           </template>
-          {{ user.firstname }} {{ user.lastname }}
+          {{ user.fullname }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
@@ -86,14 +86,9 @@
           </vc-col>
         </vc-row>
         <vc-row :gutter="20">
-          <vc-col :span="12">
-            <vc-input-group required prop="firstname" label='Họ'>
-              <vc-input v-model="user.firstname" placeholder='Nhập họ' maxlength="250" />
-            </vc-input-group>
-          </vc-col>
-          <vc-col :span="12">
-            <vc-input-group required prop="lastname" label='Tên'>
-              <vc-input v-model="user.lastname" placeholder='Nhập tên' maxlength="250" />
+          <vc-col>
+            <vc-input-group required prop="fullname" label='Họ và tên'>
+              <vc-input v-model="user.fullname" placeholder='Nhập họ và tên' maxlength="250" />
             </vc-input-group>
           </vc-col>
         </vc-row>
@@ -161,13 +156,9 @@ const rules = reactive({
     { label: 'Mật khẩu', required: true, validator: validate.required, trigger: ["blur"] },
     { label: 'Mật khẩu', validator: validate.maxLengthRule, trigger: ["blur"], max: 250 },
   ],
-  firstname: [
-    { label: 'Họ', required: true, validator: validate.required, trigger: ["blur"] },
-    { label: 'Họ', validator: validate.maxLengthRule, trigger: ["blur"], max: 250 },
-  ],
-  lastname: [
-    { label: 'Tên', required: true, validator: validate.required, trigger: ["blur"] },
-    { label: 'Tên', validator: validate.maxLengthRule, trigger: ["blur"], max: 250 },
+  fullname: [
+    { label: 'Họ và tên', required: true, validator: validate.required, trigger: ["blur"] },
+    { label: 'Họ và tên', validator: validate.maxLengthRule, trigger: ["blur"], max: 250 },
   ],
   phone: [
     { label: 'Số điện thoại', required: true, validator: validate.required, trigger: ["blur"] },
@@ -203,8 +194,7 @@ let callback = (value: any) => { return value };
 const user = reactive({
   _id: '',
   username: null,
-  firstname: null,
-  lastname: null,
+  fullname: null,
   email: null,
   phone: null,
   address: null,
