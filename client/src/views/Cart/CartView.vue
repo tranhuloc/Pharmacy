@@ -3,53 +3,121 @@
  * Dependencies injection library
  */
 import axios from 'axios';
-import { onMounted, ref, computed } from "vue";
+import { onMounted, ref, computed, reactive } from "vue";
 import BaseLayout from "../../layouts/sections/components/BaseLayout.vue";
 import { useStore } from 'vuex';
+import { DeleteFilled, Plus, Minus } from '@element-plus/icons-vue'
+import type { FormInstance } from 'element-plus'
+import { RouterLink } from "vue-router";
+import { useToast } from 'vue-toast-notification';
 
 /**
  * Variable define
  */
-const receiver = ref<any>('');
-const phone = ref<any>('');
-const address = ref<any>('');
 // Access the store
 const store = useStore();
+const toast = useToast();
 
 // Computed properties
 const cart = computed(() => store.state.cart);
 const cartTotalQty = computed(() => store.state.cartTotalQty);
 const cartTotalAmount = computed(() => store.state.cartTotalAmount);
+const isLogged = ref<any>(false);
+const formRef = ref<FormInstance>()
+const validateForm = reactive({
+    receiver: '',
+    phone: '',
+    address: '',
+    note: '',
+})
 
 /**
  * Life circle vue js
  */
 onMounted(() => {
-
+    isLogged.value = localStorage.getItem('isLogged') ?? false;
+    const userInfo = JSON.parse(localStorage.getItem('userInfo')) ?? {};
+    if (userInfo) {
+        validateForm.receiver = userInfo.fullname
+        validateForm.phone = userInfo.fullname
+        validateForm.address = userInfo.address
+    }
 });
 
-computed
 /**
  * Function
  */
-const updateToCart = (payload) => store.commit('updateToCart', payload);
+const getImageUrl = (url: any) => {
+    return `${import.meta.env.VITE_SERVER_URL}${url}`;
+};
 
-const onRegister = async () => {
-    try {
-        const response = await axios.post(`${import.meta.env.VITE_API_URL}/users`);
-        data.value = response && response.data ? response.data.data : {};
+const increaseQuantity = (i: any, id: any) => {
+    cart.value.map((data, o) => {
+        if (i === o) {
+            const storedData = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart') ?? "") : [];
+            const itemIndex = storedData.findIndex(item => item.id == id);
 
-    } catch (error) {
-        console.error('Error fetching data:', error);
+            if (itemIndex !== -1) {
+                storedData[itemIndex].qty = data.qty + 1;
+                localStorage.setItem('cart', JSON.stringify(storedData));
+                return {
+                    ...data,
+                    qty: data.qty + 1
+                };
+            }
+        }
+        return data;
+    });
+    store.commit('updateToCart')
+};
+
+const decreaseQuantity = (i: any, id: any) => {
+    cart.value.map((data, o) => {
+        if (i === o) {
+            if (data.qty > 1) {
+                const storedData = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart') ?? "") : [];
+                const itemIndex = storedData.findIndex(item => item.id == id);
+
+                if (itemIndex !== -1) {
+                    storedData[itemIndex].qty = data.qty - 1;
+                    localStorage.setItem('cart', JSON.stringify(storedData));
+                }
+                return { ...data, qty: data.qty - 1 };
+            } else {
+                return data;
+            }
+        }
+        return data;
+    });
+    store.commit('updateToCart')
+};
+
+const removeFromCart = (i: any, id: any) => {
+    const storedData = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart') ?? "") : [];
+    const itemIndexToRemove = storedData.findIndex(item => item.id == id);
+
+    if (itemIndexToRemove !== -1) {
+        storedData.splice(itemIndexToRemove, 1);
     }
-}
+
+    localStorage.setItem('cart', JSON.stringify(storedData));
+    toast.success("Xóa sản phẩm khỏi giỏ hàng thành công");
+    store.commit('updateToCart')
+};
+
+const emptyCart = () => {
+    cart.value = [];
+    localStorage.removeItem('cart');
+    store.commit('updateToCart')
+};
+
 </script>
 <template>
     <BaseLayout :title="product_name" :breadcrumb="[
         { label: 'Trang chủ', route: '/' },
         { label: 'Giỏ hàng' },
     ]">
-        <div class="sec_row container">
+        <div class="container">
             <div class="justify-content-center m-0">
                 <div class="mt-5 mb-5">
                     <div class="card">
@@ -58,131 +126,84 @@ const onRegister = async () => {
                                 <h4 class="text-white m-0" style="color: white; margin: 0px">Giỏ hàng {{ cart.length > 0
                                     ?
                                     `(${cart.length})` : '' }}</h4>
-                                <button v-if="cart.length > 0" @click="emptyCart" class="btn btn-danger mt-0 btn-sm">
-                                    <i class="fa fa-trash-alt mr-2"></i>
-                                    <span>Làm trống giỏ hàng</span>
-                                </button>
+                                <el-popconfirm v-if="cart.length > 0" confirm-button-text="Có" width="auto"
+                                    cancel-button-text="Không" :icon="InfoFilled" icon-color="#626AEF"
+                                    title="Bạn muốn làm trống giỏ hàng?" @confirm="emptyCart">
+                                    <template #reference>
+                                        <el-button :icon="DeleteFilled" type="danger" plain>Làm trống giỏ
+                                            hàng</el-button>
+                                    </template>
+                                </el-popconfirm>
                             </div>
                         </div>
                         <div class="card-body p-0" style="padding: 0px 30px 30px 30px">
-                            <table v-if="cart.length === 0" class="table cart-table mb-0">
-                                <tbody>
-                                    <tr>
-                                        <td colspan="6">
-                                            <div class="cart-empty" style="text-align: center;">
-                                                <i class="fa fa-shopping-cart"></i>
-                                                <p>Giỏ hàng trống</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <table v-else class="table cart-table mb-0">
-                                <thead>
-                                    <tr>
-                                        <th>Xóa</th>
-                                        <th>Hình ảnh</th>
-                                        <th>Tên sản phẩm</th>
-                                        <th>Kích thước</th>
-                                        <th>Giá</th>
-                                        <th>Số lượng</th>
-                                        <th class="text-right"><span id="amount" class="amount">Tổng giá</span></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="(data, index) in cart" :key="index">
-                                        <td><button class="prdct-delete" @click="removeFromCart(index, data.id)"><i
-                                                    class="fa fa-trash"></i></button></td>
-                                        <td>
-                                            <div class="product-img">
-                                                <img :src="API_URL + data.image" :alt="data.name"
-                                                    style="width: 100px" />
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="product-name">
-                                                <p>{{ data.name }}</p>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <p>{{ data.size }}</p>
-                                        </td>
-                                        <td>{{ formattedPrice(data.price) }}</td>
-                                        <td>
-                                            <div class="prdct-qty-container">
-                                                <button class="prdct-qty-btn" type="button"
-                                                    @click="decreaseQuantity(index, data.id)">
-                                                    <i class="fa fa-minus"></i>
-                                                </button>
-                                                <input type="text" name="qty" class="qty-input-box" :value="data.qty"
-                                                    disabled />
-                                                <button class="prdct-qty-btn" type="button"
-                                                    @click="increaseQuantity(index, data.id)">
-                                                    <i class="fa fa-plus"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                        <td class="text-right">{{ formattedPrice(data.qty * data.price) }}</td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th>&nbsp;</th>
-                                        <th colspan="4">&nbsp;</th>
-                                        <th>Tổng<span class="ml-2 mr-2">:</span><span class="text-danger"> {{
-                                            cartTotalQty
-                                                }}</span></th>
-                                        <th class="text-right"><span class="text-danger">{{
-                                            formattedPrice(cartTotalAmount)
-                                                }}</span></th>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                            <div v-if="isLoggedIn && cart.length !== 0" class="col-md-3">
-                                <div class="form-group">
-                                    <label>Tên người nhận <b style="color: red">*</b></label>
-                                    <input type="tel" class="form-control" v-model="receiver" />
-                                </div>
-                                <div class="form-group">
-                                    <label>Số điện thoại <b style="color: red">*</b></label>
-                                    <input type="tel" class="form-control" v-model="phone" />
-                                </div>
-                                <div class="form-group">
-                                    <label>Địa chỉ <b style="color: red">*</b></label>
-                                    <textarea class="form-control" v-model="address" />
-                                </div>
-                                <div class="form-group">
-                                    <label>Ghi chú</label>
-                                    <textarea class="form-control" v-model="note" />
-                                </div>
-                                <div class="form-group momo-radio active">
-                                    <label class="label">
-                                        <img src="assets/images/icon_financement.png" alt="captureWallet" class="image">
-                                        <div style="overflow:hidden">
-                                            <div class="label-title" style="white-space:nowrap">Thanh toán sau</div>
+                            <el-table :data="cart" style="width: 100%">
+                                <el-table-column prop="name" label="Tên sản phẩm" />
+                                <el-table-column label="Hình ảnh">
+                                    <template #default="scope">
+                                        <img :src="getImageUrl(scope.row.image)" :alt="scope.row.name"
+                                            style="width: 100px" />
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="price" label="Giá" />
+                                <el-table-column label="Số lượng">
+                                    <template #default="scope">
+                                        <div style="display: flex">
+                                            <el-button type="primary" :icon="Minus"
+                                                @click="decreaseQuantity(scope.$index, scope.row.id)" />
+                                            <el-input :value="scope.row.qty" style="width: 50px;" />
+                                            <el-button type="primary" :icon="Plus"
+                                                @click="increaseQuantity(scope.$index, scope.row.id)" />
                                         </div>
-                                        <input id="captureWallet" type="radio" value="paymentafter"
-                                            v-model="selectedPaymentMethod">
-                                    </label>
-                                </div>
-                                <div class="form-group momo-radio active">
-                                    <label class="label">
-                                        <img src="assets/images/logo-momo.png" alt="captureWallet" class="image">
-                                        <div style="overflow:hidden">
-                                            <div class="label-title" style="white-space:nowrap">Ví MoMo</div>
-                                        </div>
-                                        <input id="captureWallet" type="radio" value="paymentmomo"
-                                            v-model="selectedPaymentMethod">
-                                    </label>
-                                </div>
-                                <div class="form-group">
-                                    <button class="btn btn-success mt-2" @click="checkout">Đặt hàng</button>
-                                </div>
-                            </div>
-                            <a v-if="!isLoggedIn && cart.length !== 0" href="/login" class="btn btn-success">Đăng nhập
-                                trước
-                                khi đặt
-                                hàng</a>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column label="Tổng giá">
+                                    <template #default="scope">
+                                        {{ scope.row.qty * scope.row.price }}
+                                    </template>
+                                </el-table-column>
+                                <el-table-column width="100">
+                                    <template #default="scope">
+                                        <el-popconfirm v-if="cart.length > 0" confirm-button-text="Có" width="auto"
+                                            cancel-button-text="Không" :icon="InfoFilled" icon-color="#626AEF"
+                                            title="Bạn có chắc chắn muốn xóa sản phẩm khỏi giỏ hàng của mình không?"
+                                            @confirm="removeFromCart(scope.$index, scope.row.id)">
+                                            <template #reference>
+                                                <el-button :icon="DeleteFilled" type="danger" />
+                                            </template>
+                                        </el-popconfirm>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                            <p style="margin: 10px;">Tổng: <b style="color: red;">{{ cartTotalAmount }}</b></p>
+                            <el-form v-if="isLogged && cart.length !== 0" ref="formRef" :label-position="right"
+                                style="max-width: 600px; margin: 10px;" :model="validateForm" label-width="auto">
+                                <el-form-item label="Tên người nhận" prop="receiver" :rules="[
+                                    { required: true, message: 'Vui lòng nhập tên người nhận' },
+                                ]">
+                                    <el-input v-model="validateForm.receiver" type="text" autocomplete="off" />
+                                </el-form-item>
+                                <el-form-item label="Số điện thoại" prop="phone" :rules="[
+                                    { required: true, message: 'Vui lòng nhập số điện thoại' },
+                                ]">
+                                    <el-input v-model="validateForm.phone" type="tel" autocomplete="off" />
+                                </el-form-item>
+                                <el-form-item label="Địa chỉ" prop="address" :rules="[
+                                    { required: true, message: 'Vui lòng nhập địa chỉ' },
+                                ]">
+                                    <el-input v-model="validateForm.address" type="textarea" autocomplete="off" />
+                                </el-form-item>
+                                <el-form-item label="Ghi chú" prop="note">
+                                    <el-input v-model="validateForm.note" type="text" autocomplete="off" />
+                                </el-form-item>
+                                <el-form-item style="float: right;">
+                                    <el-button type="primary" @click="submitForm(formRef)">Đặt hàng</el-button>
+                                </el-form-item>
+                            </el-form>
+                            <RouterLink v-if="!isLogged && cart.length !== 0" to="/login"
+                                class="btn btn-sm bg-gradient-success mb-0">
+                                Đăng nhập trước khi đặt hàng
+                            </RouterLink>
                         </div>
                     </div>
                 </div>
@@ -238,5 +259,10 @@ const onRegister = async () => {
     right: 0.8rem;
     top: 0;
     transition: background-color .25s cubic-bezier(.4, 0, .2, 1) 0ms, box-shadow .25s cubic-bezier(.4, 0, .2, 1) 0ms, border .25s cubic-bezier(.4, 0, .2, 1) 0ms;
+}
+
+.card-header-flex {
+    display: flex;
+    justify-content: space-between;
 }
 </style>

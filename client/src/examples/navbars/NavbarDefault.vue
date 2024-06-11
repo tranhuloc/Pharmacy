@@ -4,10 +4,12 @@
  */
 import axios from 'axios';
 import { RouterLink, useRouter } from "vue-router";
-import { ref, watch, onMounted } from "vue";
+import { ref, watch, onMounted, computed } from "vue";
 import { useWindowsWidth } from "../../assets/js/useWindowsWidth";
 import ArrDark from "@/assets/img/down-arrow-dark.svg";
 import DownArrWhite from "@/assets/img/down-arrow-white.svg";
+import { ShoppingCart } from '@element-plus/icons-vue'
+import { useStore } from 'vuex';
 
 /**
  * Variable define
@@ -44,6 +46,8 @@ const props = defineProps({
 const isLogged = ref<any>(false);
 const userInfo = ref<any>({});
 const router = useRouter()
+const store = useStore();
+const count = computed(() => store.state.cartTotalQty);
 
 // set nav color on mobile && desktop
 
@@ -236,6 +240,13 @@ const handleLogout = async () => {
                 </el-popconfirm>
               </div>
             </div>
+          </li>
+          <li class="nav-item dropdown dropdown-hover mx-2">
+            <el-badge :value="count" class="item">
+              <RouterLink to="/cart">
+                <el-button :icon="ShoppingCart" type="success" circle />
+              </RouterLink>
+            </el-badge>
           </li>
         </ul>
         <ul class="navbar-nav d-lg-block d-none">

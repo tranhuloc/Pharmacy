@@ -3,10 +3,12 @@
  * Dependencies injection library
  */
 import axios from 'axios';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { ref, watch, onMounted } from "vue";
 import ProductCard from "../Presentation/Components/ProductCard.vue";
 import BaseLayout from "../../layouts/sections/components/BaseLayout.vue";
+import { useStore } from 'vuex';
+import { useToast } from 'vue-toast-notification';
 
 /**
  * Variable define
@@ -15,6 +17,9 @@ const route = useRoute();
 const data = ref<any>({});
 const product_id = ref(route.params.id);
 const product_name = ref('');
+const store = useStore();
+const toast = useToast();
+const router = useRouter()
 
 /**
  * Life circle vue js
@@ -40,6 +45,52 @@ const fetchData = async () => {
 
 const getImageUrl = (url: any) => {
     return `${import.meta.env.VITE_SERVER_URL}${url}`;
+};
+
+const addToCart = () => {
+  // Lấy giỏ hàng từ localStorage hoặc tạo một giỏ hàng mới nếu chưa tồn tại
+  let cart = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart') ?? "") : [];
+
+  // Tìm xem sản phẩm đã tồn tại trong giỏ hàng chưa
+  const existingItem = cart.find(item => item.name === data.value.product_name);
+
+  if (existingItem) {
+    existingItem.qty++;
+  } else {
+    const newItem = {
+      id: cart.length + 1,
+      image: data.value.url_image,
+      product_id: data.value._id,
+      name: data.value.product_name,
+      price: data.value.price,
+      qty: 1,
+    };
+    cart.push(newItem);
+  }
+
+  // Lưu giỏ hàng vào localStorage
+  localStorage.setItem('cart', JSON.stringify(cart));
+
+  // Cập nhật số lượng sản phẩm trong giỏ hàng (nếu cần)
+  const storedCount = localStorage.getItem('count');
+  let parsedCount = parseInt(storedCount ?? "", 10);
+
+  if (!isNaN(parsedCount)) {
+    parsedCount++;
+    localStorage.setItem('count', parsedCount.toString());
+  } else {
+    localStorage.setItem('count', "1");
+  }
+
+  store.commit('updateToCart')
+  toast.success('Thêm sản phẩm vào giỏ hàng thành công');
+};
+
+const buyNow = () => {
+  addToCart();
+  router.push({
+    name: 'page-cart',
+  })
 };
 
 </script>
@@ -136,8 +187,8 @@ const getImageUrl = (url: any) => {
                                         </div>
                                     </div>
                                     <div class="buttons d-flex my-5">
-                                        <button class="btn btn-sm bg-gradient-success">Thêm vào giỏ hàng</button>
-                                        <button class="btn btn-sm bg-gradient-secondary ms-2">Mua ngay</button>
+                                        <button class="btn btn-sm bg-gradient-success" @click="addToCart">Thêm vào giỏ hàng</button>
+                                        <button class="btn btn-sm bg-gradient-secondary ms-2" @click="buyNow">Mua ngay</button>
                                     </div>
                                 </div>
                             </div>
