@@ -59,7 +59,7 @@ router.delete('/images/:image_id', imageProductController.deleteImages);
 
 // Routes for 'orders'
 router.get('/orders/:status', orderController.getAllOrders);
-router.get('/orders/:order_id', orderController.getOrderById);
+router.get('/orders/:order_id/order_by_id', orderController.getOrderById);
 router.post('/orders', orderController.createOrder);
 router.put('/orders/:order_id', orderController.editOrder);
 router.delete('/orders/:order_id', orderController.deleteOrder);
@@ -73,6 +73,7 @@ router.get('/orders/:order_id/items', orderItemController.getOrderItemsByOrderId
 router.get('/products', productController.getAllProducts);
 router.get('/products/:product_id', productController.getProductById);
 router.post('/products', productController.createProduct);
+router.post('/products/CheckProductAvailability', productController.CheckProductAvailability);
 router.put('/products/:product_id', productController.editProduct);
 router.delete('/products/:product_id', productController.deleteProduct);
 router.get('/subcategories/:subcategory_name/:orderby/products', productController.getProductsBySubcategory);

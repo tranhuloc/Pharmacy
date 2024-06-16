@@ -664,3 +664,33 @@ exports.isProductFavorite = async (req, res) => {
             .json({ success: false, message: "Lỗi", error: error.message });
     }
 };
+
+exports.CheckProductAvailability = async (req, res) => {
+    const dataOrderDetail = req.body;
+
+    try {
+        const response = await Promise.all(dataOrderDetail.map(async (item) => {
+            const product = await Product.findById(item.product_id);
+
+            if (product) {
+                return {
+                    product_id: item.product_id,
+                    product_name: product.product_name,
+                    quantity: product.stock_quantity,
+                    available: product.stock_quantity >= item.quantity
+                };
+            } else {
+                return {
+                    product_id: item.product_id,
+                    product_name: item.product_name,
+                    message: `Sản phẩm [${item.product_name}] không tồn tại`,
+                };
+            }
+        }));
+
+        return res.status(200).json({ success: true, message: "Success", data: response });
+    } catch (error) {
+        console.error(`Error checking product availability: ${error.message}`);
+        return res.status(500).json({ success: false, message: "Server Error", error: error.message });
+    }
+};

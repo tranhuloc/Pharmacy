@@ -4,6 +4,7 @@ import { ROUTER_SUBCATEGORY } from '@/commons/config/subcategory.config'
 import { ROUTER_SUPPLIER } from '@/commons/config/supplier.config'
 import { ROUTER_PRODUCT } from '@/commons/config/product.config'
 import { ROUTER_PHARMACY } from '@/commons/config/pharmacy.config'
+import { ROUTER_ORDER } from '@/commons/config/order.config'
 
 export default [
   ...ROUTER_USER,
@@ -12,4 +13,5 @@ export default [
   ...ROUTER_SUPPLIER,
   ...ROUTER_PRODUCT,
   ...ROUTER_PHARMACY,
+  ...ROUTER_ORDER,
 ]

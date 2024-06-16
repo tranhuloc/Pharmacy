@@ -23,12 +23,14 @@ const cart = computed(() => store.state.cart);
 const cartTotalQty = computed(() => store.state.cartTotalQty);
 const cartTotalAmount = computed(() => store.state.cartTotalAmount);
 const isLogged = ref<any>(false);
+const isLoading = ref<any>(false);
 const formRef = ref<FormInstance>()
 const validateForm = reactive({
     receiver: '',
     phone: '',
     address: '',
     note: '',
+    user_id: ''
 })
 
 /**
@@ -39,8 +41,9 @@ onMounted(() => {
     const userInfo = JSON.parse(localStorage.getItem('userInfo')) ?? {};
     if (userInfo) {
         validateForm.receiver = userInfo.fullname
-        validateForm.phone = userInfo.fullname
+        validateForm.phone = userInfo.phone
         validateForm.address = userInfo.address
+        validateForm.user_id = userInfo._id
     }
 });
 
@@ -111,9 +114,77 @@ const emptyCart = () => {
     store.commit('updateToCart')
 };
 
+const checkout = async (formEl: FormInstance | undefined) => {
+    if (!formEl) return;
+
+    await formEl.validate(async (valid) => {
+        if (!valid) return;
+
+        //isLoading.value = true;
+        if (!isLogged.value) {
+            toast.warning("Vui lòng đăng nhập trước khi đặt hàng")
+        }
+        let dataOrderDetail = [] as any;
+
+        cart.value.forEach((item) => {
+            const newData = {
+                product_id: item.product_id,
+                product_name: item.name,
+                quantity: item.qty
+            };
+
+            dataOrderDetail.push(newData);
+        });
+        var flag = true;
+        await axios.post(`${import.meta.env.VITE_API_URL}/products/CheckProductAvailability`, dataOrderDetail)
+            .then((response) => {
+                if (response.status === 200) {
+                    var result = response.data.data;
+                    if (result && result.length > 0) {
+                        result.forEach(product => {
+                            if (product.message) {
+                                flag = false;
+                                toast.error(product.message);
+                            }
+                            else if (!product.available) {
+                                flag = false;
+                                toast.warning(`Sản phẩm [${product.product_name}] chỉ còn [${product.quantity}] sản phẩm`);
+                            }
+                        });
+                    }
+                }
+            });
+        if (flag) {
+            const currentTime = new Date();
+
+            const newData = {
+                user_id: validateForm.user_id,
+                receiver: validateForm.receiver,
+                phone: validateForm.phone,
+                address: validateForm.address,
+                order_date: currentTime,
+                total_amount: cartTotalAmount.value,
+                status: 'Chờ xác nhận',
+                note: validateForm.note,
+                order_items: dataOrderDetail,
+            };
+
+            axios.post(`${import.meta.env.VITE_API_URL}/orders`, newData)
+                .then((response) => {
+                    if (response.status === 200) {
+                        emptyCart();
+                        toast.success('Đặt đơn hàng thành công');
+                    } else {
+                        toast.error('Lỗi khi đặt hàng');
+                    }
+                });
+        }
+    })
+}
+
 </script>
 <template>
-    <BaseLayout :title="product_name" :breadcrumb="[
+    <BaseLayout :breadcrumb="[
         { label: 'Trang chủ', route: '/' },
         { label: 'Giỏ hàng' },
     ]">
@@ -197,7 +268,8 @@ const emptyCart = () => {
                                     <el-input v-model="validateForm.note" type="text" autocomplete="off" />
                                 </el-form-item>
                                 <el-form-item style="float: right;">
-                                    <el-button type="primary" @click="submitForm(formRef)">Đặt hàng</el-button>
+                                    <el-button type="primary" @click="checkout(formRef)" :loading="isLoading">Đặt
+                                        hàng</el-button>
                                 </el-form-item>
                             </el-form>
                             <RouterLink v-if="!isLogged && cart.length !== 0" to="/login"

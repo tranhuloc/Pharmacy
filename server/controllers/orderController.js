@@ -8,7 +8,7 @@ exports.getAllOrders = async (req, res) => {
   try {
     const status = req.params.status;
     const query = status !== 'Tất cả' ? { status } : {};
-
+    query.is_deleted = false;
     const orders = await Order.find(query);
     res.status(200).json({ success: true, data: orders });
   } catch (error) {
@@ -20,7 +20,7 @@ exports.getAllOrders = async (req, res) => {
 exports.getOrderById = async (req, res) => {
   try {
     const order = await Order.findById(req.params.order_id);
-    if (!order) {
+    if (!order || order.is_deleted) {
       return res.status(404).json({ message: 'Đơn hàng không tồn tại' });
     }
     res.status(200).json({ success: true, data: order });
@@ -31,7 +31,6 @@ exports.getOrderById = async (req, res) => {
 
 // Tạo đơn hàng mới
 exports.createOrder = async (req, res) => {
-
   try {
     const newOrder = new Order({
       user_id: req.body.user_id,
@@ -39,21 +38,22 @@ exports.createOrder = async (req, res) => {
       phone: req.body.phone,
       address: req.body.address,
       order_date: req.body.order_date,
-      total_price: req.body.total_price,
+      total_price: req.body.total_amount,
       status: req.body.status,
       note: req.body.note,
-      is_deleted: false
+      is_deleted: false,
+      created_at: Date.now(),
+      updated_at: Date.now()
     });
     const order = await newOrder.save();
-
     for (const order_item of req.body.order_items) {
       const item = new OrderItem({
         order_id: order._id,
         product_id: order_item.product_id,
-        color: order_item.color,
-        size: order_item.size,
         quantity: order_item.quantity,
-        is_deleted: false
+        is_deleted: false,
+        created_at: Date.now(),
+        updated_at: Date.now()
       });
 
       await item.save();
@@ -61,7 +61,7 @@ exports.createOrder = async (req, res) => {
       await Product.findOneAndUpdate(
         { _id: order_item.product_id },
         {
-          $inc: { stock_quantity: -order_item.quantity },
+          $inc: { stock_quantity: -order_item.quantity }, updated_at: Date.now()
         },
         { new: true }
       );
@@ -106,15 +106,15 @@ exports.deleteOrder = async (req, res) => {
 // Lấy tất cả đơn hàng của một người dùng theo ID người dùng
 exports.getOrdersByUserId = async (req, res) => {
   try {
-    const userId = req.params.userId;
+    const user_id = req.params.user_id;
     // Kiểm tra xem người dùng có tồn tại hay không
-    const user = await User.findById(userId);
+    const user = await User.findById(user_id);
     if (!user) {
       return res.status(404).json({ message: 'Người dùng không tồn tại' });
     }
 
     // Lấy tất cả đơn hàng của người dùng dựa trên ID người dùng
-    const orders = await Order.find({ user_id: userId }).populate('user_id');
+    const orders = await Order.find({ user_id: user_id }).populate('user_id');
     res.status(200).json({ success: true, data: orders });
   } catch (error) {
     return res.status(500).json({ success: false, message: 'Lỗi khi lấy danh sách đơn hàng của người dùng', error: error.message });
@@ -125,7 +125,7 @@ exports.changeStatusOrder = async (req, res) => {
   try {
     const order_id = req.params.order_id;
     const newStatus = req.params.newStatus;
-
+console.log(newStatus);
     // Tìm và cập nhật trạng thái của đơn hàng
     const updatedOrder = await Order.findOne(
       { _id: order_id }
@@ -145,7 +145,7 @@ exports.changeStatusOrder = async (req, res) => {
         await Product.findOneAndUpdate(
           { _id: orderDetail.product_id },
           {
-            $inc: { stock_quantity: +orderDetail.quantity },
+            $inc: { stock_quantity: +orderDetail.quantity }, updated_at: Date.now()
           },
           { new: true }
         );
@@ -160,7 +160,7 @@ exports.changeStatusOrder = async (req, res) => {
         await Product.findOneAndUpdate(
           { _id: orderDetail.product_id },
           {
-            $inc: { stock_quantity: -orderDetail.quantity },
+            $inc: { stock_quantity: -orderDetail.quantity }, updated_at: Date.now()
           },
           { new: true }
         );
@@ -169,11 +169,11 @@ exports.changeStatusOrder = async (req, res) => {
     // Tìm và cập nhật trạng thái của đơn hàng
     await Order.findOneAndUpdate(
       { _id: order_id },
-      { status: newStatus },
+      { status: newStatus, updated_at: Date.now() },
       { new: true }
     );
 
-    res.status(200).json({ message: `Đơn đặt hàng #${order_id} đã được cập nhật thành trạng thái "${newStatus}"` });
+    res.status(200).json({ success: true, message: `Đơn đặt hàng #${order_id} đã được cập nhật thành trạng thái "${newStatus}"` });
   } catch (error) {
     return res.status(500).json({ success: false, message: 'Lỗi khi thay đổi trạng thái đơn đặt hàng', error: error.message });
   }

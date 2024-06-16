@@ -225,6 +225,10 @@ const handleLogout = async () => {
                           </div>
                         </template>
                       </el-popconfirm>
+                      <RouterLink to="/purchase"
+                        class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1">
+                        Quản lí đơn hàng
+                      </RouterLink>
                     </div>
                   </div>
                 </div>
@@ -238,6 +242,10 @@ const handleLogout = async () => {
                     </div>
                   </template>
                 </el-popconfirm>
+                <RouterLink to="/purchase"
+                  class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1">
+                  Quản lí đơn hàng
+                </RouterLink>
               </div>
             </div>
           </li>

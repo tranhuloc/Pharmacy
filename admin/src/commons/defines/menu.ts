@@ -8,6 +8,12 @@ export default [
     icon: 'HomeFilled',
   },
   {
+    routerName: 'ManageOrdere',
+    path: '/order',
+    text: 'Quản lí đơn hàng',
+    icon: 'MessageBox',
+  },
+  {
     routerName: 'ManageUser',
     path: '/user',
     text: 'Quản lí người dùng',
