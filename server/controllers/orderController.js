@@ -125,7 +125,7 @@ exports.changeStatusOrder = async (req, res) => {
   try {
     const order_id = req.params.order_id;
     const newStatus = req.params.newStatus;
-console.log(newStatus);
+
     // Tìm và cập nhật trạng thái của đơn hàng
     const updatedOrder = await Order.findOne(
       { _id: order_id }

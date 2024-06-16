@@ -7,7 +7,6 @@ import VcRegister from '@/components/commons/vc-register'
 
 import { registerLayouts } from '@/layouts/_register'
 
-import directive from '@/utils/directive'
 // ===================== ELEMENT PLUS =========================
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
@@ -29,7 +28,6 @@ const pinia = createPinia()
 app.use(pinia)
 
 // ===================== ADD DIRECTIVE ===========================
-app.use(directive)
 app.use(router)
 app.use(ElementPlus, {
   locale: vi,

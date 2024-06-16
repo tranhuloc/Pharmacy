@@ -3,7 +3,7 @@ export const FUNC_NAME = ''
 // ========================== ROUTER =============================
 export const ROUTER_ACCOUNT = [
   {
-    path: '/QLDP/DoiMatKhau',
+    path: '/change-password',
     name: 'ChangePassWord',
     component: () => import('@auth/views/account/ChangePassword.vue'),
     meta: {

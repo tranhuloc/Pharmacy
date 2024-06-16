@@ -2,7 +2,7 @@
   <vc-side-bar-left>
     <div class="container-profile mb-8">
       <div class="headline">
-        <h2>Title</h2>
+        <h2>Thông tin</h2>
       </div>
       <div class="profile-content">
         <vc-card class="box-card">
@@ -12,20 +12,14 @@
               </vc-icon>
             </vc-col>
             <vc-col :span="24" :md="{ span: 8 }" class="box-card-row-col">
-              <label> Name</label>
-              <h2>{{ account?.fullName }}</h2>
+              <label> Họ và tên</label>
+              <h2>{{ account?.fullname }}</h2>
             </vc-col>
           </vc-row>
           <vc-row :gutter="12" class="box-card-row">
             <vc-col :span="24" :md="{ span: 8 }" class="box-card-row-col">
-              <small>Email</small>
+              <small>Địa chỉ email</small>
               <h4>{{ account?.email }}</h4>
-            </vc-col>
-          </vc-row>
-          <vc-row :gutter="12" class="box-card-row">
-            <vc-col :span="24" :md="{ span: 8 }" class="box-card-row-col">
-              <small> BranchName </small>
-              <h4> {{ account?.branchName }} </h4>
             </vc-col>
           </vc-row>
         </vc-card>
@@ -35,11 +29,12 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from '@auth/stores/auth.store'
-import { storeToRefs } from 'pinia'
-import dateTime from "@/utils/dateTime";
-const authStore = useAuthStore()
-const { account } = storeToRefs(authStore)
+import { ref, onMounted } from 'vue';
+
+const account = ref<any>({})
+onMounted(() => {
+  account.value = JSON.parse(localStorage.getItem('userInfo') ?? "") ?? {};
+})
 
 </script>
 

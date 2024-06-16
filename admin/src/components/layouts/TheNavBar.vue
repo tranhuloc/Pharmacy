@@ -15,7 +15,7 @@
 
         <el-col :span="6" class="col-right">
           <el-link type="primary" :underline="false" @click="goPage('AccountProfile')">
-            <span> {{ account?.fullName }} </span>
+            <span> {{ userInfo.fullname }} </span>
             <el-icon class="el-icon--right">
               <CaretBottom />
             </el-icon>
@@ -28,22 +28,20 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { storeToRefs } from 'pinia'
-import { useAuthStore } from '@auth/stores/auth.store'
 import { ref, onMounted, onUnmounted } from 'vue';
 
-const authStore = useAuthStore()
-const { account } = storeToRefs(authStore)
 const router = useRouter()
 const showNav = ref(false)
 
 const isMenuVisibleLocal = ref<boolean>(false)
+const userInfo = ref<any>({})
 const widthMenu = ref(window.innerWidth - 200)
 const emit = defineEmits(['toogleSidebar'])
 
 onMounted(() => {
   handleResize();
   window.addEventListener('resize', handleResize);
+  userInfo.value = JSON.parse(localStorage.getItem('userInfo')) ?? {};
 })
 
 const handleResize = () => {

@@ -1,5 +1,5 @@
 import LoginView from '@auth/views/auth/LoginNewView.vue'
-export const FUNC_NAME = 'auth'
+export const FUNC_NAME = 'users'
 
 // ========================== ROUTER =============================
 export const ROUTER_AUTH = [
@@ -15,10 +15,10 @@ export const ROUTER_AUTH = [
 
 // ========================== PATH API =============================
 export const API = {
-  SIGN_IN: `${FUNC_NAME}/signin`,
+  SIGN_IN: `${FUNC_NAME}/login`,
   GET_INFO: `${FUNC_NAME}/infoLogin`,
   REFRESH_TOKEN: `${FUNC_NAME}/refresh-token`,
-  CHANGE_PASSWORD: `${FUNC_NAME}/change-password`,
+  CHANGE_PASSWORD: `${FUNC_NAME}/update_password/reset`,
 }
 
 // ========================== CONFIG TABLE ==========================

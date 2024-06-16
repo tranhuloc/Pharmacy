@@ -10,15 +10,15 @@ export type AuthResponse = {
 };
 
 export type AuthRequestLogin = {
-  username: string | null;
+  email: string | null;
   password: string | null;
-  remember: boolean;
+  isAdmin: boolean;
 };
 
 export type AuthChangePassword = {
-  id: string;
-  current_password: string;
-  new_password: string;
+  email: string;
+  currentPassword: string;
+  newPassword: string;
 };
 
 export type AuthInfoUserResponse = {

@@ -6,7 +6,6 @@ import type {
   AuthInfoUserResponse
 } from '@auth/interfaces/auth.interface'
 import { useToastStore } from '@/stores/toast.store'
-import { COOKIE_KEY } from '@/commons/const'
 import { API } from '@/commons/config/auth.config'
 
 const authService = {
@@ -16,24 +15,6 @@ const authService = {
 
   async getInfo(): Promise<AuthInfoUserResponse> {
     return await apiClient.get(API.GET_INFO)
-  },
-  async clearLocalStorage() {
-    localStorage.removeItem(COOKIE_KEY.ACCESS_TOKEN)
-    localStorage.removeItem(COOKIE_KEY.REFRESH_TOKEN)
-    localStorage.removeItem(COOKIE_KEY.AUTH_INFO)
-  },
-  async updateLocalStorage(data: AuthResponse) {
-    localStorage.setItem(COOKIE_KEY.ACCESS_TOKEN, data.token)
-    localStorage.setItem(COOKIE_KEY.REFRESH_TOKEN, data.refresh_token)
-  },
-  async updateLocalStorageAuthInfo(info: AuthInfoUserResponse) {
-    localStorage.setItem(COOKIE_KEY.AUTH_INFO, JSON.stringify(info))
-  },
-  async updateCookies(data: AuthResponse) {
-    document.cookie = `${COOKIE_KEY.ACCESS_TOKEN}=${data.token}; ${COOKIE_KEY.REFRESH_TOKEN}=${data.refresh_token}`;
-  },
-  async clearCookies() {
-    document.cookie = '';
   },
   async changePassword(data: AuthChangePassword) {
     const toastStore = useToastStore()

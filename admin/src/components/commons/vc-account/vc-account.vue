@@ -32,14 +32,10 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { useAuthStore } from "@auth/stores/auth.store";
 import accountActions from "@/commons/defines/accountAction";
-import { storeToRefs } from "pinia";
 
-const authStore = useAuthStore();
 const router = useRouter();
 const confirmDialog = ref<any>(null);
-const { account } = storeToRefs(authStore);
 
 const logout = () => {
   confirmDialog.value.confirm(
@@ -47,7 +43,8 @@ const logout = () => {
     'Bạn có muốn đăng xuất?',
     (res: any) => {
       if (res) {
-        authStore.logout();
+        localStorage.removeItem("userInfo")
+        localStorage.removeItem("isLoggedIn")
         router.push({
           name: "Login",
         });

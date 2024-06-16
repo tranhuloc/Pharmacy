@@ -113,7 +113,7 @@ exports.editUser = async (req, res) => {
         return res.status(401).json({ success: false, message: 'Email đã tồn tại!' });
       }
     }
-    
+
     // Kiểm tra xem role_id đã tồn tại và mật khẩu có thay đổi hay không
     const updateFields = {
       fullname,
@@ -175,8 +175,8 @@ exports.deleteUser = async (req, res) => {
 // Lấy thông tin người dùng bằng ID
 exports.login = async (req, res) => {
   try {
-    const { email, password } = req.body;
-  
+    const { email, password, isAdmin } = req.body;
+
     const user = await User.findOne({ email, is_deleted: false });
 
     if (!user) {
@@ -188,7 +188,13 @@ exports.login = async (req, res) => {
     if (!isPasswordValid) {
       return res.status(401).json({ success: false, message: 'Mật khẩu không đúng' });
     }
+
     const role = await Role.findById(user.role_id);
+    if (isAdmin) {
+      if (role.role_name == "Người dùng") {
+        return res.status(401).json({ success: false, message: 'Không có quyền truy cập' });
+      }
+    }
 
     return res.status(200).json({
       success: true, message: 'Đăng nhập thành công', data: {
@@ -217,12 +223,16 @@ exports.checkEmail = async (req, res) => {
 };
 
 exports.updatePassword = async (req, res) => {
-  const { email, newPassword } = req.body;
-
   try {
+    const { email, newPassword, currentPassword } = req.body;
     const user = await User.findOne({ email, is_deleted: false });
     if (!user) {
       return res.status(404).json({ success: false, message: 'Người dùng không tồn tại' });
+    }
+    const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
+
+    if (!isPasswordValid) {
+      return res.status(401).json({ success: false, message: 'Mật khẩu cũ không đúng' });
     }
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(newPassword, saltRounds);

@@ -15,27 +15,17 @@
 <script setup lang="ts">
 // import { useRouter } from "vue-router";
 import TheNavBar from './TheNavBar.vue'
-
-import { storeToRefs } from 'pinia'
-import { useAuthStore } from '@auth/stores/auth.store'
 import { onMounted, ref } from 'vue'
 import router from '@/modules/router';
-
-//const router = useRouter();
-const authStore = useAuthStore()
-const { loggedIn } = storeToRefs(authStore)
 
 const isCollapse = ref<boolean>(false)
 
 onMounted(() => {
-  if (!loggedIn.value) {
-    authStore.refresh().then((isLoggedIn) => {
-      if (!isLoggedIn) {
-        router.push({
-          name: "Login",
-        });
-      }
-    });
+  const isLoggedIn = localStorage.getItem("isLoggedIn") ?? false
+  if (!isLoggedIn) {
+    router.push({
+      name: 'Login',
+    })
   }
 })
 

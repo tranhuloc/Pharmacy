@@ -34,12 +34,10 @@
 import { onMounted, ref } from 'vue'
 import menuSideBars from '@/commons/defines/menuSideBars'
 import { MESSAGE } from '@/commons/const';
-import { useAuthStore } from '@/modules/auth/stores/auth.store';
 import { useRouter } from "vue-router";
 
 const logoutPopup = ref<any>(null)
 const userInfo = ref<any>({});
-const authStore = useAuthStore();
 const router = useRouter();
 
 onMounted(async () => {
@@ -52,7 +50,8 @@ const onLogout = async () => {
     MESSAGE.LOGOUT_CONFIRM_MESSAGE,
     async (res: any) => {
       if (res) {
-        authStore.logout();
+        localStorage.removeItem("userInfo")
+        localStorage.removeItem("isLoggedIn")
         router.push({
           name: "Login",
         });

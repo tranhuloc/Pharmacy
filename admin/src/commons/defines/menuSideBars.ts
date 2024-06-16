@@ -1,16 +1,16 @@
 
 export default [
   {
-    title: 'Account',
+    title: 'Tài khoản',
     icon: 'UserFilled',
     permission: ['2', '3'],
     items: [
       {
-        name: 'AccountInfo',
+        name: 'Thông tin tài khoản',
         pathName: 'AccountProfile', permission: ['2', '3'],
       },
       {
-        name: 'ChangePassword',
+        name: 'Đổi mật khẩu',
         pathName: 'ChangePassWord', permission: ['2', '3'],
       },
     ],

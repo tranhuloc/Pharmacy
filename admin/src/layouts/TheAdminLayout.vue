@@ -15,15 +15,10 @@
 <script setup lang="ts">
 import TheNavBar from '@/components/layouts/TheNavBar.vue'
 import TheSideBar from '@/components/layouts/TheSideBar.vue'
-
-import { storeToRefs } from 'pinia'
-import { useAuthStore } from '@auth/stores/auth.store'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-const authStore = useAuthStore()
 const router = useRouter()
-const { loggedIn } = storeToRefs(authStore)
 
 const isCollapse = ref<boolean>(false)
 const isMenuVisibleLocal = ref<boolean>(true)
@@ -36,17 +31,9 @@ const getCurrentURL = () => {
 onMounted(async () => {
   handleResize();
   window.addEventListener('resize', handleResize);
-  // const url = getCurrentURL()
-
-  // if (url.toString() === '/callback' || url.toString() === '/logout-callback')
-  //   return;
-
-  // const userInfo = await oidcAuth.getUser();
-  // authStore.setUserInfo(userInfo);
- await authStore.refresh()
-
-  // if (!loggedIn.value)
-  //   gotoLogin()
+  const loggedIn = localStorage.getItem("isLoggedIn") ?? false
+  if (!loggedIn)
+    gotoLogin()
 
 })
 
