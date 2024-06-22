@@ -72,7 +72,7 @@ responses:
     - text: "Dạ cửa hàng mình có hỗ trợ vận chuyển khắp cả nước ạ"
   
   utter_suggest:
-    - text: "Các món ngon nhất của cửa hàng là Thịt bò Mĩ, Gạo ST25..."
+    - text: "Các sản phẩm mới của cửa hàng là các sản phẩm đến từ Mỹ, Anh, Pháp..."
 
 session_config:
   session_expiration_time: 60

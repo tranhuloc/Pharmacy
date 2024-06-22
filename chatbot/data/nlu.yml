@@ -337,5 +337,5 @@ nlu:
   - intent: pham_vi
     examples: |
       - cửa hàng giao những nơi nào
-      - pham vi giao món ăn của cửa hàng
-      - pham vi giao món ăn
+      - pham vi giao hàng của cửa hàng
+      - pham vi giao hàng
