@@ -12,7 +12,21 @@ export const useOrderStore = defineStore('useOrderStore', {
     pageConfig: <any>[],
     loading: <any>[],
     search: '',
-    status: 'Tất cả'
+    status: 'Tất cả',
+    dateRange: [
+      new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+      new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0),
+    ],
+    chartData: <any>{
+      labels: <any>[],
+      datasets: [
+        {
+          label: 'Doanh thu bán hàng',
+          backgroundColor: '#205995',
+          data: <any>[]
+        }
+      ]
+    }
   }),
   actions: {
     /**
@@ -38,6 +52,31 @@ export const useOrderStore = defineStore('useOrderStore', {
             }
             return item;
           });
+          this.loading = false
+        })
+    },
+    async getStatistical() {
+      this.loading = true
+
+      await orderService
+        .getStatistical({
+          startDate: this.dateRange[0],
+          endDate: this.dateRange[1],
+        })
+        .then((data: any) => {          
+          const result = data.data ?? []
+          this.chartData = {
+            labels: result.labels,
+            datasets: [
+              {
+                label: 'Doanh thu bán hàng',
+                backgroundColor: '#205995',
+                data: result.datasets
+              }
+            ]
+          }
+        })
+        .finally(() => {
           this.loading = false
         })
     },

@@ -23,6 +23,7 @@
     "sass": "^1.53.0",
     "sass-loader": "^13.0.2",
     "vue": "^3.2.37",
+    "vue-chartjs": "^5.3.1",
     "vue-router": "^4.0.16",
     "vue3-google-map": "^0.20.0"
   },

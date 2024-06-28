@@ -4,13 +4,18 @@
  */
 import axios from 'axios';
 import { RouterLink, useRouter } from "vue-router";
-import { ref, watch, onMounted, computed } from "vue";
+import { ref, watch, onMounted, computed, reactive } from "vue";
 import { useWindowsWidth } from "../../assets/js/useWindowsWidth";
 import ArrDark from "@/assets/img/down-arrow-dark.svg";
 import DownArrWhite from "@/assets/img/down-arrow-white.svg";
 import { ShoppingCart } from '@element-plus/icons-vue'
 import { useStore } from 'vuex';
 import downArrow from "@/assets/img/down-arrow.svg";
+import {
+  Search,
+  Operation
+} from '@element-plus/icons-vue'
+import { useToast } from 'vue-toast-notification';
 
 /**
  * Variable define
@@ -50,6 +55,13 @@ const router = useRouter()
 const store = useStore();
 const count = computed(() => store.state.cartTotalQty);
 
+const keywordSearch = ref<any>('')
+const dialogVisible = ref(false)
+const toast = useToast();
+const defaultData = reactive({
+  supplier_name: '',
+  active_ingredient: '',
+});
 // set nav color on mobile && desktop
 
 let textDark = ref(props.darkText);
@@ -126,6 +138,37 @@ const handleLogout = async () => {
   })
 };
 
+const onSearch = async () => {
+  try {
+    // const response = await axios.get(`${import.meta.env.VITE_API_URL}/products`, defaultData);
+    // if (response.status == 200) {
+    //   const data = response.data.data
+    //   toast.success("Cập nhật thông tin thành công");
+    //   resetForm(formEl)
+    // }
+    // else toast.error("Cập nhật thông tin không thành công");
+  } catch (error) {
+    toast.error(error.response.data.message);
+  }
+}
+const onSearchDetail = async () => {
+  try {
+    // const response = await axios.get(`${import.meta.env.VITE_API_URL}/products`, defaultData);
+    // if (response.status == 200) {
+    //   const data = response.data.data
+    //   toast.success("Cập nhật thông tin thành công");
+    //   resetForm(formEl)
+    // }
+    // else toast.error("Cập nhật thông tin không thành công");
+  } catch (error) {
+    toast.error(error.response.data.message);
+  }
+}
+
+const reset = () => {
+  dialogVisible.value = false
+  // Clear điều kiện search reload lại
+}
 </script>
 <template>
   <nav class="navbar navbar-expand-lg top-0" :class="{
@@ -164,6 +207,11 @@ const handleLogout = async () => {
         </span>
       </button>
       <div class="collapse navbar-collapse w-100 pt-3 pb-2 py-lg-0" id="navigation">
+        <div>
+          <el-input style="width: 360px; margin-right: 10px;" placeholder="Nhập tên sản phẩm" clearable v-model="keywordSearch" />
+          <el-button type="primary" :icon="Search" @click="onSearch">Tìm kiếm</el-button>
+          <el-button type="info" :icon="Operation" @click="dialogVisible = true">Chi tiết</el-button>
+        </div>
         <ul class="navbar-nav navbar-nav-hover ms-auto">
           <li class="nav-item dropdown dropdown-hover mx-2">
             <a role="button" class="nav-link ps-2 d-flex cursor-pointer align-items-center" :class="getTextColor()"
@@ -246,6 +294,10 @@ const handleLogout = async () => {
                         class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1">
                         Quản lí đơn hàng
                       </RouterLink>
+                      <RouterLink to="/profile"
+                        class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1">
+                        Tài khoản của bạn
+                      </RouterLink>
                     </div>
                   </div>
                 </div>
@@ -262,6 +314,10 @@ const handleLogout = async () => {
                 <RouterLink to="/purchase"
                   class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1">
                   Quản lí đơn hàng
+                </RouterLink>
+                <RouterLink to="/profile"
+                  class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1">
+                  Tài khoản của bạn
                 </RouterLink>
               </div>
             </div>
@@ -283,6 +339,23 @@ const handleLogout = async () => {
       </div>
     </div>
   </nav>
+  <el-dialog v-model="dialogVisible" title="Tìm kiếm nâng cao" align-center>
+    <el-form :model="defaultData" label-position="top">
+      <el-form-item prop="supplier_name" label="Nhà cung cấp">
+        <el-input v-model="defaultData.supplier_name" placeholder="Nhà cung cấp sản phẩm" />
+      </el-form-item>
+      <el-form-item prop="active_ingredient" label="Hoạt chất">
+        <el-input v-model="defaultData.active_ingredient" placeholder="Hoạt chất sản phẩm" />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button type="primary" @click="onSearchDetail">
+          Tìm kiếm
+        </el-button>
+      </div>
+    </template>
+  </el-dialog>
   <vue3-confirm-dialog />
   <!-- End Navbar -->
 </template>

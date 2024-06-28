@@ -5,14 +5,6 @@
         <el-descriptions-item>
           <template #label>
             <div class="cell-item">
-              Tên đăng nhập
-            </div>
-          </template>
-          {{ user.username }}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template #label>
-            <div class="cell-item">
               Họ và tên
             </div>
           </template>
@@ -63,8 +55,8 @@
         require-asterisk-position="right" v-else>
         <vc-row :gutter="20" v-if="props.type == POPUP_TYPE.CREATE">
           <vc-col :span="12">
-            <vc-input-group required prop="username" label='Tên đăng nhập'>
-              <vc-input v-model="user.username" placeholder='Nhập tên đăng nhập' maxlength="250" />
+            <vc-input-group required prop="fullname" label='Họ và tên'>
+              <vc-input v-model="user.fullname" placeholder='Nhập họ và tên' maxlength="250" />
             </vc-input-group>
           </vc-col>
           <vc-col :span="12">
@@ -75,20 +67,13 @@
         </vc-row>
         <vc-row :gutter="20" v-else>
           <vc-col :span="12">
-            <vc-input-group required prop="username" label='Tên đăng nhập'>
-              <vc-input v-model="user.username" placeholder='Nhập tên đăng nhập' maxlength="250" />
+            <vc-input-group required prop="fullname" label='Họ và tên'>
+              <vc-input v-model="user.fullname" placeholder='Nhập họ và tên' maxlength="250" />
             </vc-input-group>
           </vc-col>
           <vc-col :span="12">
             <vc-input-group label='Mật khẩu'>
               <vc-input v-model="user.password" placeholder='Nhập mật khẩu' maxlength="250" type="password" />
-            </vc-input-group>
-          </vc-col>
-        </vc-row>
-        <vc-row :gutter="20">
-          <vc-col>
-            <vc-input-group required prop="fullname" label='Họ và tên'>
-              <vc-input v-model="user.fullname" placeholder='Nhập họ và tên' maxlength="250" />
             </vc-input-group>
           </vc-col>
         </vc-row>

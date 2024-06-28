@@ -70,6 +70,10 @@ const orderService = {
         return response
       })
   },
+   // getStatistical
+  async getStatistical(params?: unknown): Promise<APIResponse<any[]>> {
+    return await apiClient.post(API.STATISTICAL, params)
+  },
 }
 
 export default orderService

@@ -31,10 +31,6 @@ export const tableConfig = {
 
 export const colConfig = [
   {
-    key: "username",
-    title: 'Tên đăng nhập',
-  },
-  {
     key: "fullname",
     title: 'Họ và tên',
   },

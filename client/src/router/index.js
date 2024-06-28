@@ -29,6 +29,8 @@ import ElTypography from "../layouts/sections/elements/typography/TypographyView
 import CollectionView from "../views/Collection/CollectionView.vue";
 import DetailView from "../views/Detail/DetailView.vue";
 import ManagePurchaseView from "../views/ManagePurchase/ManagePurchaseView.vue";
+import ManageProfileView from "../views/Auth/ProfileView.vue";
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -66,6 +68,11 @@ const router = createRouter({
       path: "/purchase",
       name: "page-purchase",
       component: ManagePurchaseView,
+    },
+    {
+      path: "/profile",
+      name: "page-profile",
+      component: ManageProfileView,
     },
   ],
 });

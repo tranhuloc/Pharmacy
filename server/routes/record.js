@@ -117,14 +117,14 @@ router.get(
         try {
             const user = req.user;
             const existingUser1 = await User.findOne({ email: user.emails[0].value }).populate('idRole');
-  
+
             if (!existingUser1) {
                 const defaultRole = await Role.findOne({ roleName: 'user' });
-  
+
                 if (defaultRole) {
                     userRole = defaultRole._id;
                 }
-  
+
                 const newUser = new User({
                     firstname: user.name.givenName,
                     lastname: user.name.familyName,
@@ -135,7 +135,7 @@ router.get(
                     address: '',
                     idRole: userRole,
                 });
-  
+
                 await newUser.save();
 
                 res.redirect(`http://localhost:3000/auth/callback?id=${newUser._id}&firstname=${newUser.firstname}&lastname=${newUser.lastname}&email=${newUser.email}&phone=${newUser.phone}&address=${newUser.address}&role=user`);
@@ -146,6 +146,6 @@ router.get(
             res.status(500).json({ error: 'Internal Server Error' });
         }
     }
-  );
-  
+);
+
 module.exports = router;

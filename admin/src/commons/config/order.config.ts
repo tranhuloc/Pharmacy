@@ -10,13 +10,14 @@ export const ROUTER_ORDER = [
 
 // ========================== PATH API =============================
 export const API = {
-  ORDER: (status: string)=> `/${FUNC_NAME}/${status}`,
+  ORDER: (status: string) => `/${FUNC_NAME}/${status}`,
   CREATE: `/${FUNC_NAME}`,
   DETAIL: (id: string) => `${FUNC_NAME}/${id}/order_by_id`,
   ORDER_DETAIL: (id: string) => `${FUNC_NAME}/${id}/items`,
   CHANGE_STATUS: (id: string, status: string) => `${FUNC_NAME}/${id}/${status}`,
   UPDATE: (id: string) => `${FUNC_NAME}/${id}`,
   DELETE: (id: string) => `${FUNC_NAME}/${id}`,
+  STATISTICAL: `/revenues/get-revenue`,
 }
 
 // ========================== CONFIG TABLE ==========================

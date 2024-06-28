@@ -110,7 +110,7 @@ const addMsg = (msg: any) => {
   document.getElementById("message-box").scrollTop = document.getElementById("message-box").scrollHeight;
 };
 
-const addResponseMsgs = (msg: any) => {
+const addResponseMsg = (msg: any) => {
   let div = document.createElement("div");
   div.innerHTML = `<div class="chat-message-received">${msg}</div>`;
   div.className = "chat-message-div";
