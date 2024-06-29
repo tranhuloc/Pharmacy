@@ -8,6 +8,7 @@ import { useAppStore } from "@/stores";
 import { useStore } from 'vuex';
 import { useToast } from 'vue-toast-notification';
 import { RouterLink, useRouter } from "vue-router";
+import formatNumberWithCommas from "@/utils/number";
 
 /**
  * Variable define
@@ -109,7 +110,7 @@ const buyNow = () => {
       <RouterLink :to="{ name: 'page-detail', params: { id: props._id } }" :product_name="props.product_name">
         <h6 class="mb-0 text-truncate">{{ props.product_name }}</h6>
       </RouterLink>
-      <b class="text-primary">{{ props.price }}</b>
+      <b class="text-primary">{{ formatNumberWithCommas(props.price) }} đ</b>
       <p class="text-secondary text-sm font-weight-normal">
         {{ props.packaging }}
       </p>

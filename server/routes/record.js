@@ -76,10 +76,10 @@ router.post('/products', productController.createProduct);
 router.post('/products/CheckProductAvailability', productController.CheckProductAvailability);
 router.put('/products/:product_id', productController.editProduct);
 router.delete('/products/:product_id', productController.deleteProduct);
-router.get('/subcategories/:subcategory_name/:orderby/products', productController.getProductsBySubcategory);
+router.get('/subcategories/products', productController.getProductsBySubcategory);
 router.get('/categories/:categoryName/:orderby/products', productController.getProductsByCategory);
 router.get('/newest-products', productController.getNewestProducts);
-router.get('/search/:keyword', productController.search);
+router.get('/search', productController.search);
 router.get('/products/:user_id/:product_id', productController.checkUserHasPurchased);
 router.get('/products/:user_id/:product_id/favorite', productController.isProductFavorite);
 

@@ -9,6 +9,7 @@ import ProductCard from "../Presentation/Components/ProductCard.vue";
 import BaseLayout from "../../layouts/sections/components/BaseLayout.vue";
 import { useStore } from 'vuex';
 import { useToast } from 'vue-toast-notification';
+import formatNumberWithCommas from "@/utils/number";
 
 /**
  * Variable define
@@ -123,7 +124,7 @@ const buyNow = () => {
                                     Thương hiệu: {{ data.trademark ?? '' }}
                                 </div>
                                 <div class="price-area my-4">
-                                    <b class="text-primary">{{ data.price ?? '' }}</b>
+                                    <b class="text-primary">{{ data.price ? `${formatNumberWithCommas(data.price)} đ` : '' }}</b>
                                     <p class="mt-2">
                                         Giá đã bao gồm thuế. Phí vận chuyển và các chi phí khác (nếu có) sẽ được thể
                                         hiện khi đặt hàng</p>

@@ -55,8 +55,18 @@ const router = createRouter({
       component: DetailView,
     },
     {
-      path: "/collection/:name",
+      path: "/collection/:collection_name",
       name: "page-collection",
+      component: CollectionView,
+    },
+    {
+      path: "/search/:keyword_search",
+      name: "page-search",
+      component: CollectionView,
+    },
+    {
+      path: "/search/:supplier_name/:active_ingredient",
+      name: "page-search-options",
       component: CollectionView,
     },
     {

@@ -56,12 +56,11 @@ const store = useStore();
 const count = computed(() => store.state.cartTotalQty);
 
 const keywordSearch = ref<any>('')
+const supplierName = ref<any>('')
+const activeIngredient = ref<any>('')
 const dialogVisible = ref(false)
 const toast = useToast();
-const defaultData = reactive({
-  supplier_name: '',
-  active_ingredient: '',
-});
+
 // set nav color on mobile && desktop
 
 let textDark = ref(props.darkText);
@@ -140,36 +139,47 @@ const handleLogout = async () => {
 
 const onSearch = async () => {
   try {
-    // const response = await axios.get(`${import.meta.env.VITE_API_URL}/products`, defaultData);
-    // if (response.status == 200) {
-    //   const data = response.data.data
-    //   toast.success("Cập nhật thông tin thành công");
-    //   resetForm(formEl)
-    // }
-    // else toast.error("Cập nhật thông tin không thành công");
+    if (keywordSearch.value) {
+      router.push({
+        name: 'page-search',
+        params: {
+          keyword_search: keywordSearch.value
+        }
+      })
+      clearConditionSearch();
+    }
   } catch (error) {
-    toast.error(error.response.data.message);
+    console.log(error);
   }
 }
 const onSearchDetail = async () => {
   try {
-    // const response = await axios.get(`${import.meta.env.VITE_API_URL}/products`, defaultData);
-    // if (response.status == 200) {
-    //   const data = response.data.data
-    //   toast.success("Cập nhật thông tin thành công");
-    //   resetForm(formEl)
-    // }
-    // else toast.error("Cập nhật thông tin không thành công");
+    if (activeIngredient.value || supplierName.value) {
+      router.push({
+        name: 'page-search-options',
+        params: {
+          supplier_name: supplierName.value,
+          active_ingredient: activeIngredient.value
+        }
+      })
+      togglePopup();
+    }
   } catch (error) {
-    toast.error(error.response.data.message);
+    console.log(error);
   }
 }
-
-const reset = () => {
-  dialogVisible.value = false
-  // Clear điều kiện search reload lại
+const clearConditionSearch = () => {
+  keywordSearch.value = ''
+  supplierName.value = ''
+  activeIngredient.value = ''
 }
+const togglePopup = () => {
+  dialogVisible.value = !dialogVisible.value
+  clearConditionSearch();
+}
+
 </script>
+
 <template>
   <nav class="navbar navbar-expand-lg top-0" :class="{
     'z-index-3 w-100 shadow-none navbar-transparent position-absolute my-3':
@@ -208,9 +218,10 @@ const reset = () => {
       </button>
       <div class="collapse navbar-collapse w-100 pt-3 pb-2 py-lg-0" id="navigation">
         <div>
-          <el-input style="width: 360px; margin-right: 10px;" placeholder="Nhập tên sản phẩm" clearable v-model="keywordSearch" />
+          <el-input style="width: 360px; margin-right: 10px;" placeholder="Nhập tên sản phẩm" clearable
+            v-model="keywordSearch" />
           <el-button type="primary" :icon="Search" @click="onSearch">Tìm kiếm</el-button>
-          <el-button type="info" :icon="Operation" @click="dialogVisible = true">Chi tiết</el-button>
+          <el-button type="info" :icon="Operation" @click="togglePopup">Chi tiết</el-button>
         </div>
         <ul class="navbar-nav navbar-nav-hover ms-auto">
           <li class="nav-item dropdown dropdown-hover mx-2">
@@ -242,7 +253,8 @@ const reset = () => {
                       </div>
                     </a>
                     <div class="dropdown-menu mt-0 py-3 px-2 mt-3">
-                      <RouterLink :to="{ name: 'page-collection', params: { name: subcategory.subcategory_name } }"
+                      <RouterLink
+                        :to="{ name: 'page-collection', params: { collection_name: subcategory.subcategory_name } }"
                         v-for="subcategory in item.subcategories" class="dropdown-item ps-3 border-radius-md mb-1">
                         {{ subcategory.subcategory_name }}
                       </RouterLink>
@@ -262,7 +274,8 @@ const reset = () => {
                       </div>
                     </div>
                   </div>
-                  <RouterLink :to="{ name: 'page-collection', params: { name: subcategory.subcategory_name } }"
+                  <RouterLink
+                    :to="{ name: 'page-collection', params: { collection_name: subcategory.subcategory_name } }"
                     v-for="subcategory in item.subcategories" class="dropdown-item ps-3 border-radius-md mb-1">
                     {{ subcategory.subcategory_name }}
                   </RouterLink>
@@ -339,13 +352,13 @@ const reset = () => {
       </div>
     </div>
   </nav>
-  <el-dialog v-model="dialogVisible" title="Tìm kiếm nâng cao" align-center>
-    <el-form :model="defaultData" label-position="top">
+  <el-dialog v-model="dialogVisible" title="Tìm kiếm nâng cao" align-top :close="togglePopup">
+    <el-form label-position="top">
       <el-form-item prop="supplier_name" label="Nhà cung cấp">
-        <el-input v-model="defaultData.supplier_name" placeholder="Nhà cung cấp sản phẩm" />
+        <el-input v-model="supplierName" placeholder="Nhà cung cấp sản phẩm" />
       </el-form-item>
       <el-form-item prop="active_ingredient" label="Hoạt chất">
-        <el-input v-model="defaultData.active_ingredient" placeholder="Hoạt chất sản phẩm" />
+        <el-input v-model="activeIngredient" placeholder="Hoạt chất sản phẩm" />
       </el-form-item>
     </el-form>
     <template #footer>

@@ -478,38 +478,55 @@ exports.deleteProduct = async (req, res) => {
 // Lấy tất cả sản phẩm theo subcategory_id
 exports.getProductsBySubcategory = async (req, res) => {
     try {
-        const subcategory_name = req.params.subcategory_name;
+        const { subcategory_name, order_by, from_price, to_price, list_suppliers } = req.query;
         const subcategory = await Subcategory.findOne({
             subcategory_name,
             is_deleted: false,
         });
-        const orderBy = req.params.orderby;
+        if (!subcategory) {
+            return res
+                .status(404)
+                .json({ success: false, message: "Danh mục không tồn tại" });
+        }
+        const searchQuery = {
+            is_deleted: false,
+        };
+        searchQuery.subcategory_id = subcategory._id;
 
+        // Filter by price range
+        if (from_price !== undefined && to_price !== undefined) {
+            searchQuery.price = {
+                $gte: from_price,
+                $lte: to_price
+            };
+        } else if (from_price !== undefined) {
+            searchQuery.price = { $gte: from_price };
+        } else if (to_price !== undefined) {
+            searchQuery.price = { $lte: to_price };
+        }
+
+        // Filter by suppliers
+        if (list_suppliers && list_suppliers.length > 0) {
+            searchQuery.supplier_name = { $in: list_suppliers };
+        }
+        // Determine the sorting options
         let sortOptions = {};
-
-        if (orderBy === "manual") {
-            sortOptions = { created_at: -1 };
-        } else if (orderBy === "price-ascending") {
+        if (order_by === "manual") {
+            sortOptions = { _id: -1 };
+        } else if (order_by === "price-ascending") {
             sortOptions = { price: 1 };
-        } else if (orderBy === "price-descending") {
+        } else if (order_by === "price-descending") {
             sortOptions = { price: -1 };
-        } else if (orderBy === "title-ascending") {
+        } else if (order_by === "title-ascending") {
             sortOptions = { product_name: 1 };
-        } else if (orderBy === "title-descending") {
+        } else if (order_by === "title-descending") {
             sortOptions = { product_name: -1 };
         }
 
-        if (!subcategory) {
-            return res.status(404).json({
-                success: false,
-                message: "Danh mục con không tồn tại",
-            });
-        }
-        const products = await Product.find({
-            subcategory_id: subcategory._id,
-            is_deleted: false,
-        }).sort(sortOptions);
-        return res.status(200).json({ success: true, data: products });
+        // Execute the search query with sorting
+        const results = await Product.find(searchQuery).sort(sortOptions);
+
+        return res.status(200).json({ success: true, data: results });
     } catch (error) {
         return res.status(500).json({
             success: false,
@@ -539,7 +556,7 @@ exports.getProductsByCategory = async (req, res) => {
             sortOptions = { product_name: -1 };
         }
         const category = await Category.findOne({
-            product_name: categoryName,
+            category_name: categoryName,
             is_deleted: false,
         });
 
@@ -592,13 +609,56 @@ exports.getNewestProducts = async (req, res) => {
 };
 
 exports.search = async (req, res) => {
-    const keyword = req.params.keyword;
-
+    const { keyword, order_by, supplier_name, active_ingredient, from_price, to_price, list_suppliers } = req.query;
     try {
-        const results = await Product.find({
-            product_name: { $regex: new RegExp(keyword, "i") },
+        // Build the search query object
+        const searchQuery = {
             is_deleted: false,
-        });
+        };
+
+        if (keyword) {
+            searchQuery.product_name = { $regex: new RegExp(keyword, "i") };
+        }
+
+        if (supplier_name) {
+            searchQuery.supplier_name = { $regex: new RegExp(supplier_name, "i") };
+        }
+
+        if (active_ingredient) {
+            searchQuery.active_ingredient = { $regex: new RegExp(active_ingredient, "i") };
+        }
+        // Filter by price range
+        if (from_price !== undefined && to_price !== undefined) {
+            searchQuery.price = {
+                $gte: from_price,
+                $lte: to_price
+            };
+        } else if (from_price !== undefined) {
+            searchQuery.price = { $gte: from_price };
+        } else if (to_price !== undefined) {
+            searchQuery.price = { $lte: to_price };
+        }
+
+        // Filter by suppliers
+        if (list_suppliers && list_suppliers.length > 0) {
+            searchQuery.supplier_name = { $in: list_suppliers };
+        }
+        // Determine the sorting options
+        let sortOptions = {};
+        if (order_by === "manual") {
+            sortOptions = { _id: -1 };
+        } else if (order_by === "price-ascending") {
+            sortOptions = { price: 1 };
+        } else if (order_by === "price-descending") {
+            sortOptions = { price: -1 };
+        } else if (order_by === "title-ascending") {
+            sortOptions = { product_name: 1 };
+        } else if (order_by === "title-descending") {
+            sortOptions = { product_name: -1 };
+        }
+
+        // Execute the search query with sorting
+        const results = await Product.find(searchQuery).sort(sortOptions);
 
         return res.status(200).json({ success: true, data: results });
     } catch (error) {
