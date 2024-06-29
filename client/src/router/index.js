@@ -70,7 +70,7 @@ const router = createRouter({
       component: CollectionView,
     },
     {
-      path: "/product-pharmacy/:pharmacy_name",
+      path: "/product-pharmacy/:pharmacy_name/:pharmacy_id",
       name: "page-product-pharmacy",
       component: CollectionView,
     },

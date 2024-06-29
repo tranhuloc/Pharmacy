@@ -23,7 +23,7 @@ const keywordSearch = ref(route.params.keyword_search);
 const supplierName = ref(route.params.supplier_name);
 const activeIngredient = ref(route.params.active_ingredient);
 const pharmacyName = ref(route.params.pharmacy_name);
-const pharmacyId = ref(route.query.pharmacy_id);
+const pharmacyId = ref(route.params.pharmacy_id);
 
 /**
  * Life circle vue js
@@ -52,7 +52,7 @@ watch(
                 break;
             case "page-product-pharmacy":
                 resetValues();
-                pharmacyId.value = router.query.pharmacy_id;
+                pharmacyId.value = newName.pharmacy_id;
                 pharmacyName.value = newName.pharmacy_name;
                 break;
             default:
@@ -90,11 +90,15 @@ const fetchData = async () => {
                         order_by: orderby.value,
                         from_price: from_price.value,
                         to_price: to_price.value,
-                        list_suppliers: list_suppliers.value
-                    }
+                        list_suppliers: list_suppliers.value,
+                    },
                 }
             );
-        } else if (route.name === "page-search" || route.name === "page-search-options" || route.name === "page-product-pharmacy") {
+        } else if (
+            route.name === "page-search" ||
+            route.name === "page-search-options" ||
+            route.name === "page-product-pharmacy"
+        ) {
             response = await axios.get(
                 `${import.meta.env.VITE_API_URL}/search`,
                 {
@@ -106,8 +110,8 @@ const fetchData = async () => {
                         from_price: from_price.value,
                         to_price: to_price.value,
                         list_suppliers: list_suppliers.value,
-                        pharmacy_id: pharmacyId.value
-                    }
+                        pharmacy_id: pharmacyId.value,
+                    },
                 }
             );
         }
@@ -124,17 +128,31 @@ const handleOrderByChange = async event => {
 };
 
 const setCondition = async (fromPrice: any, toPrice: any, suppliers: any) => {
-    from_price.value = fromPrice
-    to_price.value = toPrice
-    list_suppliers.value = suppliers
-    await fetchData()
-}
+    from_price.value = fromPrice;
+    to_price.value = toPrice;
+    list_suppliers.value = suppliers;
+    await fetchData();
+};
 </script>
 <template>
-    <BaseLayout :title="collectionName ? collectionName : pharmacyName ? pharmacyName : 'Kết quả tìm kiếm'" :breadcrumb="[
-        { label: 'Trang chủ', route: '/' },
-        { label: collectionName ? collectionName : pharmacyName ? pharmacyName : 'Tìm kiếm' },
-    ]">
+    <BaseLayout
+        :title="
+            collectionName
+                ? collectionName
+                : pharmacyName
+                ? pharmacyName
+                : 'Kết quả tìm kiếm'
+        "
+        :breadcrumb="[
+            { label: 'Trang chủ', route: '/' },
+            {
+                label: collectionName
+                    ? collectionName
+                    : pharmacyName
+                    ? pharmacyName
+                    : 'Tìm kiếm',
+            },
+        ]">
         <div class="container mt-sm-3 mt-3" style="padding: 0">
             <div class="row">
                 <div class="col-lg-3">
@@ -142,15 +160,22 @@ const setCondition = async (fromPrice: any, toPrice: any, suppliers: any) => {
                 </div>
                 <div class="col-lg-9">
                     <div class="mb-2">
-                        <div style="
+                        <div
+                            style="
                                 display: flex;
                                 justify-content: space-between;
                             ">
                             <h4 style="margin: 0">Danh sách sản phẩm</h4>
                             <div>
-                                <div class="input-group input-group-outline" style="display: flex; align-items: center">
-                                    <label style="margin: 0">Sắp xếp theo</label>
-                                    <select class="ms-2 form-control" @change="handleOrderByChange($event)">
+                                <div
+                                    class="input-group input-group-outline"
+                                    style="display: flex; align-items: center">
+                                    <label style="margin: 0"
+                                        >Sắp xếp theo</label
+                                    >
+                                    <select
+                                        class="ms-2 form-control"
+                                        @change="handleOrderByChange($event)">
                                         <option value="manual">Mới nhất</option>
                                         <option value="price-ascending">
                                             Giá tăng dần
