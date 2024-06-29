@@ -29,6 +29,9 @@
         :loading="loading" @dbClick="onEdit" @pageChanged="onPageChanged">
         <template #action="{ data }">
           <div class="d-flex flex-center">
+            <el-tooltip class="box-item" effect="dark" content="Danh sách sản phẩm" placement="bottom">
+              <vc-button type="success" size="small" class="btn-acttion" @click="onListProduct(data)" :icon="'Finished'"></vc-button>
+            </el-tooltip>
             <vc-button type="warning" size="small" class="btn-acttion" @click="onView(data)" :icon="'View'"></vc-button>
             <vc-button type="primary" size="small" class="btn-acttion" @click="onEdit(data)" :icon="'Edit'"></vc-button>
             <vc-button type="danger" size="small" class="btn-acttion" @click="onDeleteItem(data)"
@@ -40,6 +43,7 @@
   </div>
   <vc-confirm ref="confirmDialog"></vc-confirm>
   <detail-modal ref="detailRef" :type="popupType"></detail-modal>
+  <list-product-modal ref="listProductRef"></list-product-modal>
 </template>
 <script setup lang="ts">
 /**
@@ -51,6 +55,7 @@ import { colConfig, tableConfig } from '@/commons/config/pharmacy.config'
 import { usePharmacyStore } from '@master/stores/pharmacy.store'
 import { useRouter } from 'vue-router'
 import DetailModal from './DetailView.vue'
+import ListProductModal from './ListProductModal.vue'
 import { POPUP_TYPE } from "@/commons/const";
 import pharmacyService from '@master/services/pharmacy.service';
 
@@ -76,6 +81,7 @@ const router = useRouter()
 const projectList = ref<any>([])
 const popupType = ref<POPUP_TYPE>(POPUP_TYPE.CREATE);
 const detailRef = ref<any>(null);
+const listProductRef = ref<any>(null);
 const confirmDialog = ref<any>(null);
 
 /**
@@ -112,6 +118,11 @@ const onEdit = (item: any) => {
 const onView = (item: any) => {
   popupType.value = POPUP_TYPE.VIEW;
   detailRef.value.open("Chi tiết", item._id)
+};
+
+// onView
+const onListProduct = (item: any) => {
+  listProductRef.value.open(item)
 };
 
 // onDeleteItem

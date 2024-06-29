@@ -18,13 +18,15 @@ export const useProductStore = defineStore('useProductStore', {
     * Action
     */
     // Get list product
-    async getList() {
+    async getList(fillterSelect?: any, pharmacyId?: any) {
       this.loading = true
       await productService
         .getList({
           search: this.search,
           pageNumber: this.pageConfig.page ?? 1,
-          pageSize: this.pageConfig.size ?? 10
+          pageSize: this.pageConfig.size ?? 10,
+          fillterSelect: fillterSelect,
+          pharmacyId: pharmacyId
         })
         .then((data: any) => {
           this.dataGrid = data.data ?? []

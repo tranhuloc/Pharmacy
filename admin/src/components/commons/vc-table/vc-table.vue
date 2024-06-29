@@ -23,7 +23,7 @@
       </template>
 
       <!-- ACTIONS -->
-      <el-table-column width="110" v-if="tableConfig.action">
+      <el-table-column width="145" v-if="tableConfig.action">
         <template #default="scope">
           <div class="d-flex flex-center btn-group-action">
             <slot name="action" :data="scope.row" :scope="scope" class="btn-action"></slot>

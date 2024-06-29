@@ -5,6 +5,7 @@ const Subcategory = require("../models/subcategoryModel");
 const Image = require("../models/imageProductModel");
 const Category = require("../models/categoryModel");
 const Favorite = require("../models/favoriteModel");
+const { ObjectId } = require('mongodb');
 
 const fs = require("fs");
 const path = require("path");
@@ -25,10 +26,28 @@ const upload = multer({ storage: storage });
 // Lấy tất cả sản phẩm
 exports.getAllProducts = async (req, res) => {
     try {
+        const { fillterSelect, pharmacyId } = req.query;
+
+        // Điều kiện mặc định
+        const matchStage = {
+            $match: { is_deleted: false }
+        };
+
+        // Bổ sung điều kiện theo pharmacyId
+        if (pharmacyId && ObjectId.isValid(pharmacyId)) {
+            matchStage.$match.pharmacy_id = new ObjectId(pharmacyId);
+        }
+
+        // Bổ sung điều kiện theo fillterSelect
+        if (fillterSelect === 'Còn hàng') {
+            matchStage.$match.stock_quantity = { $gt: 0 };
+        } else if (fillterSelect === 'Hết hàng') {
+            matchStage.$match.stock_quantity = { $lte: 0 };
+        }
+
+        // Thêm matchStage vào pipeline
         const products = await Product.aggregate([
-            {
-                $match: { is_deleted: false },
-            },
+            matchStage,
             {
                 $lookup: {
                     from: "pharmacies",
@@ -97,8 +116,10 @@ exports.getAllProducts = async (req, res) => {
                 },
             },
         ]);
+
         res.status(200).json({ success: true, data: products });
     } catch (error) {
+        console.log(error);
         return res.status(500).json({
             success: false,
             message: "Lỗi khi lấy danh sách sản phẩm",
