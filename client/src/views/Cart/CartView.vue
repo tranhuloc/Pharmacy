@@ -10,6 +10,7 @@ import { DeleteFilled, Plus, Minus } from '@element-plus/icons-vue'
 import type { FormInstance } from 'element-plus'
 import { RouterLink } from "vue-router";
 import { useToast } from 'vue-toast-notification';
+import formatNumberWithCommas from "@/utils/number";
 
 /**
  * Variable define
@@ -216,7 +217,11 @@ const checkout = async (formEl: FormInstance | undefined) => {
                                             style="width: 100px" />
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="price" label="Giá" />
+                                <el-table-column label="Giá">
+                                    <template #default="scope">
+                                        {{ formatNumberWithCommas(scope.row.price) }} đ
+                                    </template>
+                                </el-table-column>
                                 <el-table-column label="Số lượng">
                                     <template #default="scope">
                                         <div style="display: flex">
@@ -230,7 +235,7 @@ const checkout = async (formEl: FormInstance | undefined) => {
                                 </el-table-column>
                                 <el-table-column label="Tổng giá">
                                     <template #default="scope">
-                                        {{ scope.row.qty * scope.row.price }}
+                                        {{ formatNumberWithCommas(scope.row.qty * scope.row.price) }} đ
                                     </template>
                                 </el-table-column>
                                 <el-table-column width="100">
@@ -246,7 +251,7 @@ const checkout = async (formEl: FormInstance | undefined) => {
                                     </template>
                                 </el-table-column>
                             </el-table>
-                            <p style="margin: 10px;">Tổng: <b style="color: red;">{{ cartTotalAmount }}</b></p>
+                            <p style="margin: 10px;">Tổng: <b style="color: red;">{{ formatNumberWithCommas(cartTotalAmount) }} đ</b></p>
                             <el-form v-if="isLogged && cart.length !== 0" ref="formRef" :label-position="right"
                                 style="max-width: 600px; margin: 10px;" :model="validateForm" label-width="auto">
                                 <el-form-item label="Tên người nhận" prop="receiver" :rules="[

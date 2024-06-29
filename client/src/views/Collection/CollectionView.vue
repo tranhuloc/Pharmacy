@@ -22,6 +22,8 @@ const collectionName = ref(route.params.collection_name);
 const keywordSearch = ref(route.params.keyword_search);
 const supplierName = ref(route.params.supplier_name);
 const activeIngredient = ref(route.params.active_ingredient);
+const pharmacyName = ref(route.params.pharmacy_name);
+const pharmacyId = ref(route.query.pharmacy_id);
 
 /**
  * Life circle vue js
@@ -48,6 +50,11 @@ watch(
                 supplierName.value = newName.supplier_name;
                 activeIngredient.value = newName.active_ingredient;
                 break;
+            case "page-product-pharmacy":
+                resetValues();
+                pharmacyId.value = router.query.pharmacy_id;
+                pharmacyName.value = newName.pharmacy_name;
+                break;
             default:
                 return;
         }
@@ -63,6 +70,8 @@ const resetValues = () => {
     activeIngredient.value = null;
     keywordSearch.value = null;
     collectionName.value = null;
+    pharmacyId.value = null;
+    pharmacyName.value = null;
 };
 
 /**
@@ -85,9 +94,7 @@ const fetchData = async () => {
                     }
                 }
             );
-        } else if (route.name === "page-search" || route.name === "page-search-options") {
-            console.log(list_suppliers.value);
-
+        } else if (route.name === "page-search" || route.name === "page-search-options" || route.name === "page-product-pharmacy") {
             response = await axios.get(
                 `${import.meta.env.VITE_API_URL}/search`,
                 {
@@ -98,7 +105,8 @@ const fetchData = async () => {
                         order_by: orderby.value,
                         from_price: from_price.value,
                         to_price: to_price.value,
-                        list_suppliers: list_suppliers.value
+                        list_suppliers: list_suppliers.value,
+                        pharmacy_id: pharmacyId.value
                     }
                 }
             );
@@ -123,9 +131,9 @@ const setCondition = async (fromPrice: any, toPrice: any, suppliers: any) => {
 }
 </script>
 <template>
-    <BaseLayout :title="collectionName ? collectionName : 'Kết quả tìm kiếm'" :breadcrumb="[
+    <BaseLayout :title="collectionName ? collectionName : pharmacyName ? pharmacyName : 'Kết quả tìm kiếm'" :breadcrumb="[
         { label: 'Trang chủ', route: '/' },
-        { label: collectionName ? collectionName : 'Tìm kiếm' },
+        { label: collectionName ? collectionName : pharmacyName ? pharmacyName : 'Tìm kiếm' },
     ]">
         <div class="container mt-sm-3 mt-3" style="padding: 0">
             <div class="row">

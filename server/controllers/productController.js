@@ -630,7 +630,7 @@ exports.getNewestProducts = async (req, res) => {
 };
 
 exports.search = async (req, res) => {
-    const { keyword, order_by, supplier_name, active_ingredient, from_price, to_price, list_suppliers } = req.query;
+    const { keyword, order_by, supplier_name, active_ingredient, from_price, to_price, list_suppliers, pharmacy_id } = req.query;
     try {
         // Build the search query object
         const searchQuery = {
@@ -648,6 +648,11 @@ exports.search = async (req, res) => {
         if (active_ingredient) {
             searchQuery.active_ingredient = { $regex: new RegExp(active_ingredient, "i") };
         }
+
+        if (pharmacy_id && ObjectId.isValid(pharmacy_id)) {
+            searchQuery.pharmacy_id = new ObjectId(pharmacy_id);
+        }
+        
         // Filter by price range
         if (from_price !== undefined && to_price !== undefined) {
             searchQuery.price = {

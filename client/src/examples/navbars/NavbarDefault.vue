@@ -13,9 +13,11 @@ import { useStore } from 'vuex';
 import downArrow from "@/assets/img/down-arrow.svg";
 import {
   Search,
-  Operation
+  Operation,
+  LocationInformation
 } from '@element-plus/icons-vue'
 import { useToast } from 'vue-toast-notification';
+import { GoogleMap, Marker, MarkerCluster, InfoWindow } from "vue3-google-map";
 
 /**
  * Variable define
@@ -59,7 +61,13 @@ const keywordSearch = ref<any>('')
 const supplierName = ref<any>('')
 const activeIngredient = ref<any>('')
 const dialogVisible = ref(false)
+const dialogMapVisible = ref(false)
 const toast = useToast();
+
+const GOOGLE_MAPS_API_KEY = "AIzaSyDa6fUGWZAlcemboXTlwhZf7pzuciNZIeU";
+const zoom = ref<any>(10);
+const center = ref<any>({ lat: 0, lng: 0 });
+const locations = ref<any>([]);
 
 // set nav color on mobile && desktop
 
@@ -152,6 +160,7 @@ const onSearch = async () => {
     console.log(error);
   }
 }
+
 const onSearchDetail = async () => {
   try {
     if (activeIngredient.value || supplierName.value) {
@@ -173,9 +182,69 @@ const clearConditionSearch = () => {
   supplierName.value = ''
   activeIngredient.value = ''
 }
+
 const togglePopup = () => {
   dialogVisible.value = !dialogVisible.value
   clearConditionSearch();
+}
+
+const togglePopupMap = () => {
+  dialogMapVisible.value = !dialogMapVisible.value
+}
+
+const onShowPopupMap = async () => {
+  const response = await axios.get(`${import.meta.env.VITE_API_URL}/pharmacies`);
+  const results = response.data.data;  
+  const array = results.map((item: any) => {
+    return {
+      '_id': item._id,
+      'pharmacy_name': item.pharmacy_name,
+      'lat': item.latitude,
+      'lng': item.longitude,
+    }
+  })
+  locations.value = [...array];
+
+  if (array.length > 0) {
+    center.value = { lat: array[0].lat, lng: array[0].lng };
+  }
+  else center.value = { lat: 10.03366542137865, lng: 105.7551331565387 };
+  
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        center.value = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        };
+      },
+      (error) => {
+        console.error('Error getting location: ', error);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0,
+      }
+    );
+  } else {
+    console.error('Geolocation is not supported by this browser.');
+  }
+  dialogMapVisible.value = true;
+}
+
+const infoWindowContent = (location: any) => {
+  const googleMapsLink = `https://www.google.com/maps?q=${location.lat},${location.lng}`;
+
+  return `
+    <div>
+      <p><b>${location.pharmacy_name}</b></p>
+      <p>Latitude: ${location.lat}</p>
+      <p>Longitude: ${location.lng}</p>
+      <p><a class='mb-2' href="/product-pharmacy/${location.pharmacy_name}?pharmacy_id=${location._id}">Sản phẩm tại nhà thuốc</a></p>
+      <a href="${googleMapsLink}" target="_blank">View on Google Maps</a>
+    </div>
+  `;
 }
 
 </script>
@@ -222,6 +291,7 @@ const togglePopup = () => {
             v-model="keywordSearch" />
           <el-button type="primary" :icon="Search" @click="onSearch">Tìm kiếm</el-button>
           <el-button type="info" :icon="Operation" @click="togglePopup">Chi tiết</el-button>
+          <el-button type="success" :icon="LocationInformation" @click="onShowPopupMap">Nhà thuốc gần bạn</el-button>
         </div>
         <ul class="navbar-nav navbar-nav-hover ms-auto">
           <li class="nav-item dropdown dropdown-hover mx-2">
@@ -368,6 +438,17 @@ const togglePopup = () => {
         </el-button>
       </div>
     </template>
+  </el-dialog>
+  <el-dialog v-model="dialogMapVisible" title="Nhà thuốc gần bạn" align-top :close="togglePopupMap" width="80%">
+    <GoogleMap :api-key="GOOGLE_MAPS_API_KEY" style="width: 100%; height: 500px" :center="center" :zoom="zoom"
+      @click="handleMapClick">
+      <Marker :options="{ position: center }" />
+      <MarkerCluster>
+        <Marker v-for="(location, i) in locations" :options="{ position: location }" :key="i">
+          <InfoWindow :options="{ position: location, content: infoWindowContent(location) }" />
+        </Marker>
+      </MarkerCluster>
+    </GoogleMap>
   </el-dialog>
   <vue3-confirm-dialog />
   <!-- End Navbar -->

@@ -43,16 +43,5 @@ defineProps({
                 </div>
             </div>
         </div>
-        <div class="mx-2">
-            <MaterialPagination>
-                <MaterialPaginationItem prev class="ms-auto" />
-                <MaterialPaginationItem label="1" />
-                <MaterialPaginationItem label="2" active />
-                <MaterialPaginationItem label="3" />
-                <MaterialPaginationItem label="4" />
-                <MaterialPaginationItem label="5" />
-                <MaterialPaginationItem next />
-            </MaterialPagination>
-        </div>
     </div>
 </template>

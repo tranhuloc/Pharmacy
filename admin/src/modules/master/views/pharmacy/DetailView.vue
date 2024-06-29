@@ -43,6 +43,19 @@
           {{ dateTime.formatDateTimeNew(pharmacy.created_at) }}
         </el-descriptions-item>
       </el-descriptions>
+      <vc-row :gutter="20" v-if="type == POPUP_TYPE.VIEW">
+        <vc-col>
+          <GoogleMap :api-key="GOOGLE_MAPS_API_KEY" style="width: 100%; height: 500px" :center="center"
+            :zoom="zoom" @click="handleMapClick">
+            <Marker :options="{ position: center }" />
+            <MarkerCluster>
+              <Marker v-for="(location, i) in locations" :options="{ position: location }" :key="i">
+                <InfoWindow :options="{ position: location, content: infoWindowContent(location) }" />
+              </Marker>
+            </MarkerCluster>
+          </GoogleMap>
+        </vc-col>
+      </vc-row>
       <el-form ref="pharmacyForm" :model="pharmacy" :rules="rules" label-position="right" style="padding: 12px 16px"
         require-asterisk-position="right" v-else>
         <vc-row :gutter="20">
@@ -78,7 +91,7 @@
         </vc-row>
         <vc-row :gutter="20">
           <vc-col>
-            <GoogleMap :api-key="YOUR_GOOGLE_MAPS_API_KEY" style="width: 100%; height: 500px" :center="center"
+            <GoogleMap :api-key="GOOGLE_MAPS_API_KEY" style="width: 100%; height: 500px" :center="center"
               :zoom="zoom" @click="handleMapClick">
               <Marker :options="{ position: center }" />
               <MarkerCluster>
@@ -163,7 +176,7 @@ const pharmacy = reactive({
   created_at: '',
 });
 
-const YOUR_GOOGLE_MAPS_API_KEY = "AIzaSyDa6fUGWZAlcemboXTlwhZf7pzuciNZIeU";
+const GOOGLE_MAPS_API_KEY = "AIzaSyDa6fUGWZAlcemboXTlwhZf7pzuciNZIeU";
 const zoom = ref<any>(10);
 const center = ref<any>({ lat: 0, lng: 0 });
 const locations = ref<any>([]);
